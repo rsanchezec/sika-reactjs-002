@@ -1,0 +1,27 @@
+# Esenciales
+setuptools
+python-dotenv==1.1.0
+
+# Azure AI
+azure-ai-projects==1.0.0b10
+azure-identity==1.22.0
+azure-search-documents==11.4.0
+azure-ai-inference
+# API
+fastapi
+uvicorn[standard]
+websockets
+# PROCESAMIENTO DE AUDIO (Comentadas hasta que se implementen)
+numpy==2.2.5
+sounddevice==0.5.1
+azure-core==1.34.0
+#azure-identity==1.22.0
+websocket-client==1.8.0
+aiohttp>=3.11.18
+requests==2.32.3
+urllib3==2.4.0
+python-dotenv==1.1.0
+typing_extensions==4.13.2
+certifi==2025.4.26
+cryptography==44.0.3
+pycparser==2.22

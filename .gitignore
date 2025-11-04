@@ -1,0 +1,380 @@
+# ============================================
+# SIKA AI Assistant - .gitignore
+# ============================================
+
+# ============================================
+# 🔐 ARCHIVOS SENSIBLES Y CREDENCIALES
+# ============================================
+
+# Variables de entorno (CRÍTICO - Contienen credenciales)
+.env
+.env.local
+.env.production
+.env.development
+.env.staging
+*.env
+
+# Archivos de credenciales de Azure
+azure-credentials.json
+service-principal.json
+credentials.json
+
+# Claves SSH y certificados
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+# Archivos de configuración local con credenciales
+config.local.json
+secrets.json
+local-config.yaml
+
+
+# ============================================
+# 🐍 PYTHON
+# ============================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.virtualenv/
+*.egg-info/
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+
+# ============================================
+# 🐳 DOCKER
+# ============================================
+
+# Docker files (si son generados localmente)
+docker-compose.override.yml
+.dockerignore.local
+
+
+# ============================================
+# 💻 IDEs Y EDITORES
+# ============================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.history/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.*.swp
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+
+# ============================================
+# 🖥️ SISTEMA OPERATIVO
+# ============================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+# ============================================
+# 📝 LOGS Y TEMPORALES
+# ============================================
+
+# Logs
+*.log
+logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+.tmp/
+
+
+# ============================================
+# 📊 DATOS Y BASE DE DATOS
+# ============================================
+
+# Bases de datos locales
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Archivos de datos sensibles
+data/
+*.csv
+*.xlsx
+*.xls
+backup/
+backups/
+
+
+# ============================================
+# 🚀 AZURE Y DEPLOYMENT
+# ============================================
+
+# Azure Functions
+local.settings.json
+.azure/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfvars
+
+# Pulumi
+Pulumi.*.yaml
+.pulumi/
+
+
+# ============================================
+# 📦 DEPENDENCIAS Y PACKAGES
+# ============================================
+
+# Node.js (si hay frontend)
+node_modules/
+package-lock.json
+yarn.lock
+.pnp
+.pnp.js
+
+# Bower
+bower_components/
+
+
+# ============================================
+# 🧪 TESTING
+# ============================================
+
+# Test coverage
+.nyc_output/
+coverage/
+*.coveragerc
+
+
+# ============================================
+# 🔧 BUILD Y COMPILACIÓN
+# ============================================
+
+# Next.js (si hay frontend)
+.next/
+out/
+
+# Nuxt.js (si hay frontend)
+.nuxt/
+dist/
+
+# Gatsby (si hay frontend)
+.cache/
+public/
+
+# Webpack
+.webpack/
+
+
+# ============================================
+# 📚 DOCUMENTACIÓN GENERADA
+# ============================================
+
+# Sphinx documentation
+docs/_build/
+site/
+
+
+# ============================================
+# 🎯 ESPECÍFICO DEL PROYECTO SIKA
+# ============================================
+
+# Archivos de prueba locales
+test_*.html.local
+debug_*.py
+
+# Archivos de configuración de desarrollo local
+*local.py
+*local.sh
+
+# Outputs de audio para testing
+*.wav
+*.mp3
+*.ogg
+audio_samples/
+
+# Cache de transcripciones (si se implementa)
+transcripts_cache/
+
+# Archivos de sesiones temporales
+sessions/
+*.session
+
+
+# ============================================
+# ✅ ARCHIVOS QUE SÍ DEBEN INCLUIRSE
+# ============================================
+
+# IMPORTANTE: Estos archivos SÍ deben estar en Git
+!.env.example
+!.gitignore
+!README.md
+!requirements.txt
+!Dockerfile
+!.dockerignore
+!*.sh
+!*.py
+!*.md
+
+
+# ============================================
+# 🚫 OTROS ARCHIVOS A IGNORAR
+# ============================================
+
+# Archivos de respaldo
+*.bak
+*.backup
+*~
+*.orig
+
+# Archivos comprimidos (generalmente)
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Archivos grandes o binarios innecesarios
+*.exe
+*.dll
+*.so
+*.dylib
