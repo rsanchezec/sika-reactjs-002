@@ -1,11 +1,13 @@
-# SIKA AI Assistant - Backend API
+# SIKA AI Assistant - Aplicación Completa
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109-green.svg)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB.svg)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.0-646CFF.svg)](https://vitejs.dev/)
 [![Azure](https://img.shields.io/badge/Azure-Container%20Apps-0078D4.svg)](https://azure.microsoft.com/en-us/products/container-apps/)
 [![WebSocket](https://img.shields.io/badge/WebSocket-Real--time-orange.svg)](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)
 
-API backend WebSocket para asistente de IA inteligente integrado con Azure AI Services. Proporciona comunicación en tiempo real con persistencia de sesiones, gestión avanzada de conversaciones y **conversación por voz en tiempo real** usando Azure Voice Live API.
+Aplicación completa de asistente de IA con **frontend React** y **backend FastAPI**. Incluye comunicación WebSocket en tiempo real para modo texto (chat) y **conversación por voz en tiempo real** usando Azure Voice Live API. Desplegado en Azure Container Apps.
 
 ---
 
@@ -14,6 +16,12 @@ API backend WebSocket para asistente de IA inteligente integrado con Azure AI Se
 - [Características](#características)
 - [Arquitectura](#arquitectura)
 - [Tecnologías](#tecnologías)
+- [🎨 Frontend (React + Vite)](#-frontend-react--vite)
+  - [Características del Frontend](#características-del-frontend)
+  - [Estructura del Frontend](#estructura-del-frontend)
+  - [Configuración Local del Frontend](#configuración-local-del-frontend)
+  - [Build y Deployment del Frontend](#build-y-deployment-del-frontend)
+  - [Scripts de Deployment a Azure](#scripts-de-deployment-a-azure)
 - [Requisitos Previos](#requisitos-previos)
 - [Instalación y Configuración Local](#instalación-y-configuración-local)
 - [Despliegue en Azure (Texto)](#despliegue-en-azure)
@@ -45,6 +53,17 @@ API backend WebSocket para asistente de IA inteligente integrado con Azure AI Se
 ---
 
 ## Características
+
+### Frontend (React + Vite)
+- **💬 Interfaz de Chat Moderna**: UI intuitiva con diseño inspirado en ChatGPT
+- **🎤 Modo Voz Integrado**: Alternancia entre modo texto y voz con un click
+- **🔊 Reproducción de Audio Continua**: Sistema optimizado para streaming de audio sin cortes
+- **📝 Indicadores de Procesamiento**: Feedback visual durante las respuestas del bot
+- **🎨 Diseño Responsive**: Adaptable a dispositivos móviles y desktop
+- **⚡ Vite Hot Reload**: Desarrollo rápido con recarga instantánea
+- **🐳 Docker Multi-Stage Build**: Imagen optimizada con Nginx para producción
+- **🌐 Variables de Entorno**: Configuración flexible para desarrollo y producción
+- **📦 Build Optimizado**: Bundle minificado para máximo rendimiento
 
 ### Backend de Texto (Chat)
 - **Comunicación WebSocket en Tiempo Real**: Conexión bidireccional persistente para interacción inmediata
@@ -173,6 +192,512 @@ API backend WebSocket para asistente de IA inteligente integrado con Azure AI Se
 - **Docker** - Contenedorización
 - **Azure CLI** - Automatización de despliegues
 - **Bash Scripts** - Scripts de setup y deploy
+
+---
+
+## 🎨 Frontend (React + Vite)
+
+El frontend de SIKA AI Assistant es una aplicación React moderna construida con Vite, optimizada para comunicación WebSocket en tiempo real con los backends de texto y voz.
+
+### Características del Frontend
+
+#### 🎯 Modos de Interacción
+
+- **Modo Texto (Chat)**:
+  - Interfaz de chat con mensajes del usuario y bot
+  - Input de texto con soporte para Enter para enviar
+  - Indicador visual "Procesando tu mensaje..." mientras el bot responde
+  - Historial de conversación con scroll automático
+  - Botón para limpiar historial completo
+
+- **Modo Voz**:
+  - Activación con un solo click en el botón del micrófono
+  - Captura de audio del micrófono en tiempo real
+  - Transcripción en vivo de lo que el usuario dice
+  - Reproducción continua del audio del bot (sin cortes)
+  - Indicador "SIKA está pensando..." durante procesamiento
+  - Sistema de audio optimizado con Web Audio API
+
+#### 🎨 Diseño y UX
+
+- **Interfaz Moderna**:
+  - Diseño limpio inspirado en ChatGPT
+  - Indicador de estado de conexión (Conectado/Desconectado/Reconectando)
+  - Session ID visible para tracking
+  - Mensajes diferenciados visualmente (usuario/bot/sistema/error)
+
+- **Responsive**:
+  - Adaptable a móviles, tablets y desktop
+  - CSS Grid y Flexbox para layouts fluidos
+
+#### ⚡ Performance
+
+- **Build Optimizado**:
+  - Bundle minificado con Vite
+  - Code splitting automático
+  - Assets optimizados (CSS + JS)
+  - Gzip compression habilitada en Nginx
+
+- **Audio Streaming**:
+  - Reproducción continua sin cortes entre chunks
+  - Programación secuencial de buffers de audio
+  - Conversión PCM 16-bit optimizada
+  - Web Audio API con `AudioContext` de 24kHz
+
+### Estructura del Frontend
+
+```
+frontend/
+│
+├── src/
+│   ├── components/
+│   │   ├── ChatInterface.jsx      # 📱 Componente principal (600+ líneas)
+│   │   │                          #    - Estado de conexiones WebSocket
+│   │   │                          #    - Captura y envío de audio
+│   │   │                          #    - Reproducción de audio recibido
+│   │   │                          #    - Gestión de mensajes
+│   │   │                          #    - UI de chat y controles de voz
+│   │   │
+│   │   └── ChatInterface.css      # 🎨 Estilos del componente
+│   │                              #    - Diseño del chat
+│   │                              #    - Animaciones (typing indicator)
+│   │                              #    - Responsive design
+│   │
+│   ├── App.jsx                    # 🚀 Componente raíz de React
+│   ├── App.css                    # 🎨 Estilos globales de la app
+│   ├── main.jsx                   # 🔧 Entry point de React
+│   └── index.css                  # 🎨 Estilos base (reset, variables)
+│
+├── public/                        # 📁 Archivos estáticos públicos
+│
+├── dist/                          # 📦 Build de producción (generado)
+│   ├── index.html                 #    - HTML principal
+│   └── assets/                    #    - JS y CSS minificados
+│
+├── .env.development               # 🔧 Variables para desarrollo (localhost)
+│   # VITE_WS_TEXT_URL=ws://localhost:8000/ws/chat
+│   # VITE_WS_VOICE_URL=ws://localhost:8001/ws/voice
+│
+├── .env.production                # 🌐 Variables para producción (Azure)
+│   # VITE_WS_TEXT_URL=wss://sika-text-api.azurecontainerapps.io/ws/chat
+│   # VITE_WS_VOICE_URL=wss://sika-voice-api.azurecontainerapps.io/ws/voice
+│
+├── package.json                   # 📦 Dependencias y scripts npm
+│   # - react: 18.3.1
+│   # - react-dom: 18.3.1
+│   # - vite: 6.0.0
+│
+├── vite.config.js                 # ⚙️ Configuración de Vite
+├── index.html                     # 📄 HTML template
+│
+├── Dockerfile                     # 🐳 Docker multi-stage build
+│   # Stage 1: Build con Node.js 18
+│   # Stage 2: Serve con Nginx
+│
+├── nginx.conf                     # 🌐 Configuración de Nginx
+│   # - Serve archivos estáticos
+│   # - Fallback a index.html para React Router
+│   # - Compresión gzip habilitada
+│
+├── .dockerignore                  # 🚫 Exclusiones para Docker build
+│
+├── azure-setup-fixed.sh           # 🏗️ Setup inicial en Azure
+│   # - Crea Container App para frontend
+│   # - Build con URLs de backend en .env.production
+│   # - Push a Azure Container Registry
+│   # - Puerto 80 (Nginx)
+│
+├── deploy.sh                      # 🚢 Deployment continuo
+│   # - Rebuild con URLs de backend
+│   # - Versionado con timestamp
+│   # - Update del Container App
+│
+├── logs.sh                        # 📋 Ver logs de Azure
+│
+├── DEPLOYMENT.md                  # 📚 Guía completa de deployment
+│   # - Instrucciones paso a paso
+│   # - Comandos útiles
+│   # - Troubleshooting
+│
+└── test_websocket.html            # 🧪 Cliente de prueba standalone
+    # - Pruebas de conexión WebSocket
+    # - Testing de audio bidireccional
+```
+
+### Configuración Local del Frontend
+
+#### 1. Prerrequisitos
+
+```bash
+# Node.js 18+ requerido
+node --version  # v18.x.x o superior
+npm --version   # 9.x.x o superior
+```
+
+#### 2. Instalar Dependencias
+
+```bash
+cd frontend
+npm install
+```
+
+**Dependencias instaladas**:
+- `react` (18.3.1) - Librería UI
+- `react-dom` (18.3.1) - Renderizado DOM
+- `vite` (6.0.0) - Build tool y dev server
+- `@vitejs/plugin-react` (4.3.4) - Plugin de Vite para React
+
+#### 3. Configurar Variables de Entorno
+
+El proyecto ya incluye `.env.development` y `.env.production` configurados:
+
+**`.env.development` (para desarrollo local)**:
+```env
+VITE_WS_TEXT_URL=ws://localhost:8000/ws/chat
+VITE_WS_VOICE_URL=ws://localhost:8001/ws/voice
+```
+
+**`.env.production` (para Azure)**:
+```env
+VITE_WS_TEXT_URL=wss://sika-assistant-text-api.ambitiousforest-0f6169b7.eastus.azurecontainerapps.io/ws/chat
+VITE_WS_VOICE_URL=wss://sika-assistant-voice-api.ambitiousforest-0f6169b7.eastus.azurecontainerapps.io/ws/voice
+```
+
+**Nota**: Solo las variables con prefijo `VITE_` son accesibles en el código cliente.
+
+#### 4. Ejecutar en Modo Desarrollo
+
+```bash
+npm run dev
+```
+
+**Salida esperada**:
+```
+VITE v6.4.1  ready in 123 ms
+
+➜  Local:   http://localhost:5173/
+➜  Network: use --host to expose
+➜  press h + enter to show help
+```
+
+**Características del modo desarrollo**:
+- ⚡ Hot Module Replacement (HMR) - Cambios instantáneos sin reload
+- 🔧 Source maps para debugging
+- 🚀 Servidor de desarrollo ultra-rápido
+- 📝 Mensajes de error detallados
+
+#### 5. Verificar Funcionamiento
+
+1. Abre `http://localhost:5173/`
+2. Verifica que aparece la interfaz del chat
+3. Asegúrate de que los backends estén corriendo:
+   - Texto: `http://localhost:8000`
+   - Voz: `http://localhost:8001`
+4. El status debe mostrar "Conectado"
+
+### Build y Deployment del Frontend
+
+#### Build Local para Testing
+
+```bash
+# Build de producción
+npm run build
+
+# Output en /dist:
+#   dist/
+#   ├── index.html (0.41 KB)
+#   ├── assets/
+#   │   ├── index-CHbtFizT.css (4.53 KB)
+#   │   └── index-BwvcG5TI.js (152.77 KB gzipped: 49.32 KB)
+```
+
+**Características del build**:
+- ✅ Minificación de JS y CSS
+- ✅ Tree-shaking (elimina código no usado)
+- ✅ Code splitting automático
+- ✅ Assets con hash para cache busting
+- ✅ Source maps de producción
+
+#### Preview del Build
+
+```bash
+# Servir el build de producción localmente
+npm run preview
+
+# Abre: http://localhost:4173/
+```
+
+**Uso**: Verificar que el build funciona correctamente antes de desplegar a Azure.
+
+#### Docker Build Local
+
+```bash
+# Build de la imagen Docker con URLs de Azure
+docker build \
+  --build-arg VITE_WS_TEXT_URL=wss://sika-assistant-text-api.ambitiousforest-0f6169b7.eastus.azurecontainerapps.io/ws/chat \
+  --build-arg VITE_WS_VOICE_URL=wss://sika-assistant-voice-api.ambitiousforest-0f6169b7.eastus.azurecontainerapps.io/ws/voice \
+  -t sika-frontend .
+
+# Run localmente
+docker run -d -p 8080:80 --name sika-frontend-local sika-frontend
+
+# Test: http://localhost:8080
+```
+
+### Scripts de Deployment a Azure
+
+El frontend incluye scripts automatizados para deployment en Azure Container Apps.
+
+#### 1. `azure-setup-fixed.sh` - Setup Inicial
+
+**Propósito**: Crear toda la infraestructura Azure para el frontend (primera vez).
+
+**¿Qué hace?**:
+1. ✅ Crea/verifica Resource Group (`sika-container-rg`)
+2. ✅ Crea/verifica Azure Container Registry (`sikaregistrytext`)
+3. ✅ Crea/verifica Container App Environment (`sika-environment`)
+4. ✅ Build de la imagen Docker con URLs de backend de `.env.production`
+5. ✅ Push a Azure Container Registry
+6. ✅ Crea Container App del frontend con configuración:
+   - Puerto: 80 (Nginx)
+   - CPU: 0.25 vCPU
+   - Memoria: 0.5 GB
+   - Réplicas: 1-5 (auto-scaling)
+   - Ingress: External (HTTPS automático)
+7. ✅ Devuelve URL pública del frontend
+
+**Ejecución**:
+```bash
+cd frontend
+
+# Git Bash (Windows) o Terminal (Linux/Mac)
+chmod +x azure-setup-fixed.sh
+./azure-setup-fixed.sh
+```
+
+**Variables configurables** (editar en el script):
+```bash
+RESOURCE_GROUP="sika-container-rg"
+LOCATION="eastus"
+ACR_NAME="sikaregistrytext"
+CONTAINER_APP_NAME="sika-assistant-frontend-app"
+ENVIRONMENT_NAME="sika-environment"
+BACKEND_TEXT_URL="wss://sika-assistant-text-api...azurecontainerapps.io/ws/chat"
+BACKEND_VOICE_URL="wss://sika-assistant-voice-api...azurecontainerapps.io/ws/voice"
+```
+
+**Tiempo estimado**: ~8-10 minutos
+
+**Output esperado**:
+```
+✅ Setup completado exitosamente!
+
+🌐 URL de tu frontend:
+  App: https://sika-assistant-frontend-app.XXXXX.eastus.azurecontainerapps.io
+
+🔗 Se conecta a estos backends:
+  Text API: wss://sika-assistant-text-api...azurecontainerapps.io/ws/chat
+  Voice API: wss://sika-assistant-voice-api...azurecontainerapps.io/ws/voice
+```
+
+#### 2. `deploy.sh` - Deployments Posteriores
+
+**Propósito**: Actualizar el frontend con nuevos cambios (no recrea infraestructura).
+
+**¿Qué hace?**:
+1. ✅ Build de nueva imagen Docker con URLs de backend
+2. ✅ Tag con timestamp (`v20251105-143022`) + `latest`
+3. ✅ Push de ambas imágenes a ACR
+4. ✅ Update del Container App con la nueva imagen
+5. ✅ Muestra URL actualizada y versión desplegada
+
+**Ejecución**:
+```bash
+cd frontend
+./deploy.sh
+```
+
+**Tiempo estimado**: ~3-5 minutos
+
+**Output esperado**:
+```
+✅ Deployment completado exitosamente!
+
+📦 Versión desplegada:
+  Image: sikaregistrytext.azurecr.io/sika-assistant-frontend:v20251105-143022
+
+🌐 URL del frontend:
+  https://sika-assistant-frontend-app.XXXXX.eastus.azurecontainerapps.io
+
+🔗 Conectado a:
+  Text API: wss://...
+  Voice API: wss://...
+```
+
+#### 3. `logs.sh` - Ver Logs
+
+**Propósito**: Ver logs del frontend en tiempo real.
+
+**Ejecución**:
+```bash
+cd frontend
+./logs.sh
+
+# O manualmente:
+az containerapp logs show \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --follow
+```
+
+**Uso**: Debugging de problemas en producción.
+
+### Comandos Útiles para el Frontend
+
+#### Ver información del Container App
+
+```bash
+az containerapp show \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --query "properties.configuration.ingress.fqdn" \
+  --output tsv
+```
+
+#### Listar revisiones (deployments)
+
+```bash
+az containerapp revision list \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --output table
+```
+
+#### Rollback a una versión anterior
+
+```bash
+# 1. Listar revisiones
+az containerapp revision list --name sika-assistant-frontend-app --resource-group sika-container-rg --output table
+
+# 2. Activar revisión específica
+az containerapp revision set-mode \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --mode single \
+  --revision sika-assistant-frontend-app--REVISION-NAME
+```
+
+#### Escalar el frontend
+
+```bash
+az containerapp update \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --min-replicas 2 \
+  --max-replicas 10
+```
+
+#### Reiniciar el Container App
+
+```bash
+az containerapp revision restart \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg
+```
+
+### Troubleshooting del Frontend
+
+#### La página carga pero dice "Desconectado"
+
+**Causa**: Los backends no están corriendo o las URLs son incorrectas.
+
+**Solución**:
+```bash
+# 1. Verificar que los backends están activos
+curl https://sika-assistant-text-api...azurecontainerapps.io/health
+curl https://sika-assistant-voice-api...azurecontainerapps.io/health
+
+# 2. Verificar URLs en el build desplegado
+az containerapp revision list --name sika-assistant-frontend-app --resource-group sika-container-rg --output table
+
+# 3. Revisar logs
+./logs.sh
+
+# 4. Verificar en la consola del navegador (F12 → Console)
+# Debe mostrar: "🔧 Configuración WebSocket: - Texto: wss://..."
+```
+
+#### Cambios no se reflejan después de deploy
+
+**Solución**:
+```bash
+# 1. Hacer hard refresh en el navegador
+# Chrome/Edge: Ctrl + Shift + R
+# Firefox: Ctrl + F5
+
+# 2. Limpiar caché del navegador
+
+# 3. Verificar que el deployment se completó
+az containerapp revision list --name sika-assistant-frontend-app --resource-group sika-container-rg --output table
+
+# 4. Forzar restart
+az containerapp revision restart --name sika-assistant-frontend-app --resource-group sika-container-rg
+```
+
+#### El audio se escucha entrecortado (modo voz)
+
+**Causa**: Latencia de red o problema en la reproducción de chunks de audio.
+
+**Solución**: El código ya está optimizado con reproducción secuencial. Si persiste:
+1. Verificar conexión a internet (latencia <200ms recomendada)
+2. Abrir DevTools → Console y buscar errores de audio
+3. Verificar que el navegador soporta Web Audio API
+4. Probar con auriculares en vez de altavoces
+
+#### Error en Docker build
+
+**Problema**: El build falla con "nginx.conf not found" o ".env.production not found"
+
+**Causa**: `.dockerignore` bloqueando archivos necesarios.
+
+**Solución**:
+```bash
+# Verificar .dockerignore (ya está corregido)
+cat .dockerignore
+
+# Debe permitir:
+# - nginx.conf
+# - .env.production
+# - .env.development
+
+# Forzar rebuild sin cache
+docker build --no-cache \
+  --build-arg VITE_WS_TEXT_URL=wss://... \
+  --build-arg VITE_WS_VOICE_URL=wss://... \
+  -t sika-frontend .
+```
+
+### Costos del Frontend en Azure
+
+| Servicio | Configuración | Costo Estimado |
+|----------|---------------|----------------|
+| **Container App** | 1 réplica 24/7, 0.25vCPU, 0.5GB | ~$20-25/mes |
+| **Egress Data Transfer** | Primeros 100GB gratis | $0-5/mes |
+| **Container Registry** | Compartido con backends | $0 (ya incluido) |
+| **HTTPS Certificate** | Automático por Azure | Gratis |
+| **Total Frontend** | | **~$20-30/mes** |
+
+**Optimización de costos**:
+```bash
+# Escalar a 0 réplicas fuera de horario (ahorra ~70%)
+az containerapp update \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --min-replicas 0 \
+  --max-replicas 3
+```
+
+**Nota**: El frontend es app estática (HTML/CSS/JS), consume muy pocos recursos. Los costos principales son de los backends.
 
 ---
 
@@ -1112,6 +1637,35 @@ C:\Axxon\sika-proyect\
 │
 ├── README.md                          # Este archivo (documentación principal)
 │
+├── frontend\                          # 🎨 Frontend React + Vite
+│   │
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ChatInterface.jsx     # 📱 Componente principal del chat
+│   │   │   └── ChatInterface.css     # 🎨 Estilos del chat
+│   │   ├── App.jsx                   # 🚀 Componente raíz
+│   │   ├── App.css                   # 🎨 Estilos globales
+│   │   ├── main.jsx                  # 🔧 Entry point
+│   │   └── index.css                 # 🎨 Estilos base
+│   │
+│   ├── public/                       # 📁 Assets estáticos
+│   ├── dist/                         # 📦 Build de producción
+│   │
+│   ├── .env.development              # 🔧 Variables de desarrollo
+│   ├── .env.production               # 🌐 Variables de producción
+│   ├── package.json                  # 📦 Dependencias npm
+│   ├── vite.config.js                # ⚙️ Config de Vite
+│   │
+│   ├── Dockerfile                    # 🐳 Multi-stage build (Node + Nginx)
+│   ├── nginx.conf                    # 🌐 Config de Nginx
+│   ├── .dockerignore                 # 🚫 Exclusiones Docker
+│   │
+│   ├── azure-setup-fixed.sh          # 🏗️ Setup inicial en Azure
+│   ├── deploy.sh                     # 🚢 Deployment continuo
+│   ├── logs.sh                       # 📋 Ver logs de Azure
+│   ├── DEPLOYMENT.md                 # 📚 Guía de deployment
+│   └── test_websocket.html           # 🧪 Cliente de prueba
+│
 └── backend\
     │
     ├── text\                          # 💬 API de Texto (Chat WebSocket)
@@ -1749,19 +2303,30 @@ redis==4.5.4
 | **Egress Data Transfer** | Audio streaming | ~$5-10/mes |
 | **Total Servicio Voz** | 100 horas/mes | ~$130/mes |
 
-#### Costo Total (Ambos Servicios)
+#### Servicio Frontend (React + Vite)
+
+| Servicio | Configuración | Costo Estimado |
+|----------|---------------|----------------|
+| **Azure Container Apps (Frontend)** | 0.25vCPU, 0.5GB RAM, 1-5 réplicas | ~$15-25/mes |
+| **Azure Container Registry** | Basic tier (compartido con backends) | Incluido |
+| **Egress Data Transfer** | Archivos estáticos | ~$2-5/mes |
+| **Total Servicio Frontend** | Hosting completo | ~$20-30/mes |
+
+#### Costo Total (Todos los Servicios)
 
 | Concepto | Costo Mensual |
 |----------|---------------|
-| Infraestructura (ambos servicios) | ~$80-90/mes |
+| Infraestructura Backend (texto + voz) | ~$80-90/mes |
+| Infraestructura Frontend (React app) | ~$20-30/mes |
 | Azure AI (GPT-4, 10K mensajes) | ~$300-500/mes |
 | Voice Live (100 horas voz) | ~$90/mes |
-| **Total Estimado** | **~$470-680/mes** |
+| **Total Estimado (Sistema Completo)** | **~$490-710/mes** |
 
 **Notas**:
 - Los costos de Voice Live se cobran por minuto de conversación activa
 - El uso del mismo agente de IA compartido entre texto y voz optimiza costos
-- Container Registry es compartido entre ambos servicios
+- Container Registry es compartido entre todos los servicios (frontend + backends)
+- El frontend puede escalar a 0 réplicas en inactividad para reducir costos
 
 ### Optimización de Costos
 
@@ -1806,9 +2371,37 @@ az containerapp update \
 # Implementar límite de 10-15 minutos por sesión
 ```
 
+#### Para el Frontend:
+
+```bash
+# 1. Escalar a 0 réplicas cuando no se use (ideal para demos o pruebas)
+az containerapp update \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --min-replicas 0 \
+  --max-replicas 3
+
+# 2. Reducir recursos si no hay mucho tráfico
+az containerapp update \
+  --name sika-assistant-frontend-app \
+  --resource-group sika-container-rg \
+  --cpu 0.25 \
+  --memory 0.5Gi
+
+# 3. Habilitar CDN para reducir egress costs
+# Configurar Azure CDN delante del Container App para cachear archivos estáticos
+
+# 4. Optimizar bundle size
+# En frontend: npm run build --mode production
+# Minimiza JS/CSS y elimina código no usado
+
+# 5. Usar tier "Consumption" de Container Apps
+# Pay-per-execution en vez de dedicated instances
+```
+
 #### Estrategias Generales:
 
-- **Usar ambiente compartido**: Ambos servicios comparten el mismo Container App Environment y ACR
+- **Usar ambiente compartido**: Todos los servicios (frontend + backends) comparten el mismo Container App Environment y ACR
 - **Monitorear uso**: Revisar logs para identificar picos de uso innecesario
 - **Implementar rate limiting**: Evitar abuso del servicio
 - **Caché de respuestas**: Para preguntas frecuentes, especialmente en modo texto
@@ -1856,8 +2449,18 @@ Este proyecto es propiedad de **Axxon** y **Sika**.
 Todos los derechos reservados.
 
 **Autor:** rsanchez
-**Versión:** 2.0.0
+**Versión:** 2.1.0
 **Última actualización:** Noviembre 2025
+
+**Changelog v2.1.0:**
+- ✅ Frontend completo en React 18.3 + Vite 6.0
+- ✅ Interfaz web moderna con modo texto y modo voz
+- ✅ Web Audio API para reproducción de audio en tiempo real
+- ✅ Indicadores visuales de procesamiento y estado de conexión
+- ✅ Diseño responsive optimizado para desktop y mobile
+- ✅ Deployment automatizado a Azure Container Apps
+- ✅ Sistema completo: frontend + 2 backends (texto + voz)
+- ✅ Documentación completa de deployment del frontend
 
 **Changelog v2.0.0:**
 - ✅ Añadido servicio de voz con Azure Voice Live API
@@ -1866,7 +2469,7 @@ Todos los derechos reservados.
 - ✅ Detección semántica de voz (VAD) con cancelación de eco y ruido
 - ✅ Voz neural en español (es-ES-ElviraNeural)
 - ✅ Arquitectura dual: texto (puerto 8000) y voz (puerto 8001)
-- ✅ Documentación completa de ambos servicios
+- ✅ Documentación completa de ambos backends
 
 ---
 

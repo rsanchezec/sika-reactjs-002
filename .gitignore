@@ -128,6 +128,9 @@ docker-compose.override.yml
 *.code-workspace
 .history/
 
+# Claude Code
+.claude/
+
 # PyCharm
 .idea/
 *.iml
@@ -267,8 +270,9 @@ Pulumi.*.yaml
 
 # Node.js (si hay frontend)
 node_modules/
-package-lock.json
+# IMPORTANTE: package-lock.json NO se ignora - es necesario para builds reproducibles
 yarn.lock
+pnpm-lock.yaml
 .pnp
 .pnp.js
 
@@ -289,6 +293,12 @@ coverage/
 # ============================================
 # 🔧 BUILD Y COMPILACIÓN
 # ============================================
+
+# React + Vite (frontend)
+frontend/dist/
+frontend/.vite/
+frontend/.turbo/
+.vite-inspect/
 
 # Next.js (si hay frontend)
 .next/
