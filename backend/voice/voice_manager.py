@@ -251,6 +251,7 @@ class VoiceManager:
         self.on_agent_audio_transcript: Optional[Callable[[str], None]] = None
         self.on_session_created: Optional[Callable[[str], None]] = None
         self.on_agent_audio: Optional[Callable[[bytes], None]] = None  # Callback para enviar audio al cliente
+        self.on_user_speech_started: Optional[Callable[[], None]] = None  # ✅ NUEVO: Callback cuando el usuario empieza a hablar
 
     def start(self) -> str:
         """
@@ -330,7 +331,7 @@ class VoiceManager:
                     "type": "server_echo_cancellation"
                 },
                 "voice": {
-                    "name": "es-ES-ElviraNeural",  # Voz en español
+                    "name": "es-AR-ElenaNeural",  # Voz en español
                     "type": "azure-standard",
                     "temperature": 0.8,
                     "speaking-rate": 1
@@ -380,6 +381,38 @@ class VoiceManager:
             "event_id": ""
         }
         self.connection.send(json.dumps(message))
+
+    def cancel_response(self):
+        """
+        Cancela la respuesta actual del agente
+
+        Envía un evento response.cancel a Azure Voice Live para interrumpir
+        la respuesta en curso cuando el usuario interrumpe al agente.
+        """
+        if not self.is_running or not self.connection:
+            logger.warning("Cannot cancel response: session not running")
+            return
+
+        try:
+            # 1. Cancelar la respuesta actual
+            cancel_message = {
+                "type": "response.cancel",
+                "event_id": ""
+            }
+            self.connection.send(json.dumps(cancel_message))
+            logger.info("✅ Cancelando respuesta en curso...")
+
+            # 2. ✅ NUEVO: Limpiar el buffer de audio de entrada para evitar procesamiento residual
+            # Esto asegura que cualquier audio ya enviado pero no procesado sea descartado
+            clear_message = {
+                "type": "input_audio_buffer.clear",
+                "event_id": ""
+            }
+            self.connection.send(json.dumps(clear_message))
+            logger.info("✅ Buffer de audio limpiado")
+
+        except Exception as e:
+            logger.error(f"❌ Error al cancelar respuesta: {e}")
 
     def _safe_call_callback(self, callback, *args):
         """
@@ -453,10 +486,19 @@ class VoiceManager:
                                 self._safe_call_callback(self.on_agent_audio, audio_bytes)
 
                     elif event_type == "input_audio_buffer.speech_started":
-                        logger.info("User started speaking")
+                        logger.info("🎤 User started speaking - interrupting agent")
+
+                        # ✅ NUEVO: Cancelar la respuesta en curso en Azure
+                        self.cancel_response()
+
                         # Detener reproducción cuando el usuario habla (solo si hay reproductor local)
                         if self.audio_player:
                             self.audio_player.stop()
+
+                        # ✅ NUEVO: Notificar al frontend que el usuario interrumpió
+                        # Este callback permitirá al frontend detener el audio también
+                        if hasattr(self, 'on_user_speech_started') and self.on_user_speech_started:
+                            self._safe_call_callback(self.on_user_speech_started)
 
                     elif event_type == "error":
                         error_details = event.get("error", {})

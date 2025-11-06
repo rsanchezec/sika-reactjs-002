@@ -28,6 +28,7 @@ function ChatInterface() {
   const [isVoiceMode, setIsVoiceMode] = useState(false)
   const [voiceConnectionStatus, setVoiceConnectionStatus] = useState('Desconectado')
   const [isVoiceProcessing, setIsVoiceProcessing] = useState(false)
+  const [isAgentSpeaking, setIsAgentSpeaking] = useState(false) // Nuevo: indica si el agente está hablando
 
   const ws = useRef(null)
   const voiceWs = useRef(null)
@@ -38,6 +39,8 @@ function ChatInterface() {
   const audioStream = useRef(null)
   const playbackContext = useRef(null)
   const nextPlayTime = useRef(0)
+  const activeAudioSources = useRef([]) // Nuevo: mantener track de sources activos para poder detenerlos
+  const isInterrupting = useRef(false) // ✅ NUEVO: Bandera para evitar reproducir audio durante interrupción
 
   // Conectar al WebSocket cuando el componente se monta
   useEffect(() => {
@@ -227,9 +230,68 @@ function ChatInterface() {
 
   // ===== FUNCIONES DE MODO VOZ =====
 
+  // Función para DETENER completamente el audio del agente
+  const stopAgentAudio = () => {
+    try {
+      console.log('🛑 Deteniendo audio del agente...')
+
+      // 0. ✅ NUEVO: Activar bandera de interrupción para evitar reproducir chunks que lleguen
+      isInterrupting.current = true
+
+      // 1. Detener todos los sources de audio activos
+      activeAudioSources.current.forEach(source => {
+        try {
+          source.stop()
+        } catch (e) {
+          // El source ya podría haber terminado, ignorar error
+        }
+      })
+
+      // 2. Limpiar la lista de sources
+      activeAudioSources.current = []
+
+      // 3. Cerrar y recrear el contexto de reproducción
+      if (playbackContext.current) {
+        playbackContext.current.close()
+        playbackContext.current = null
+      }
+
+      // 4. Resetear el tiempo de reproducción
+      nextPlayTime.current = 0
+
+      // 5. ✅ NUEVO: Enviar señal al backend para CANCELAR la respuesta en curso
+      if (voiceWs.current && voiceWs.current.readyState === WebSocket.OPEN) {
+        console.log('📤 Enviando señal de cancelación al backend...')
+        try {
+          // Intentar cancelar la respuesta actual en Azure Voice Live
+          voiceWs.current.send(JSON.stringify({
+            type: 'response.cancel',
+            event_id: ''
+          }))
+        } catch (e) {
+          console.warn('⚠️ No se pudo enviar response.cancel:', e)
+        }
+      }
+
+      // 6. Actualizar estado visual
+      setIsAgentSpeaking(false)
+
+      console.log('✅ Audio del agente detenido completamente')
+      console.log('⚠️ Ignorando chunks de audio hasta nueva pregunta del usuario')
+    } catch (error) {
+      console.error('❌ Error al detener audio:', error)
+    }
+  }
+
   // Función para reproducir audio PCM recibido del backend (basado en test_websocket.html)
   const playAudioChunk = (arrayBuffer) => {
     try {
+      // ✅ NUEVO: Verificar si estamos interrumpiendo - NO reproducir audio
+      if (isInterrupting.current) {
+        console.log('⚠️ Ignorando chunk de audio (interrupción activa)')
+        return // Salir sin reproducir
+      }
+
       if (!playbackContext.current) {
         playbackContext.current = new (window.AudioContext || window.webkitAudioContext)({
           sampleRate: 24000
@@ -266,6 +328,22 @@ function ChatInterface() {
 
       // Reproducir en el momento correcto (secuencialmente)
       source.start(nextPlayTime.current)
+
+      // ✅ NUEVO: Registrar source activo para poder detenerlo después
+      activeAudioSources.current.push(source)
+      setIsAgentSpeaking(true) // Indicar que el agente está hablando
+
+      // ✅ NUEVO: Limpiar source de la lista cuando termine de reproducirse
+      source.onended = () => {
+        const index = activeAudioSources.current.indexOf(source)
+        if (index > -1) {
+          activeAudioSources.current.splice(index, 1)
+        }
+        // Si no hay más sources activos, el agente terminó de hablar
+        if (activeAudioSources.current.length === 0) {
+          setIsAgentSpeaking(false)
+        }
+      }
 
       // Actualizar nextPlayTime para el siguiente chunk
       const duration = audioBuffer.duration
@@ -324,6 +402,9 @@ function ChatInterface() {
                 }])
                 // Activar indicador de procesamiento
                 setIsVoiceProcessing(true)
+                // ✅ NUEVO: Desactivar bandera de interrupción - ahora queremos escuchar la respuesta
+                isInterrupting.current = false
+                console.log('✅ Nueva pregunta del usuario - reactivando reproducción de audio')
                 break
 
               case 'agent_text':
@@ -334,6 +415,12 @@ function ChatInterface() {
                   text: data.text,
                   sender: 'bot'
                 }])
+                break
+
+              case 'input_audio_buffer.speech_started':
+                // ✅ NUEVO: El backend detectó que el usuario empezó a hablar
+                console.log('🎤 Usuario empezó a hablar - interrumpiendo agente')
+                stopAgentAudio()
                 break
 
               case 'voice_session_stopped':
@@ -375,11 +462,9 @@ function ChatInterface() {
   }
 
   const resetAudioPlayback = () => {
-    // Resetear el tiempo de reproducción cuando el usuario empieza a hablar
-    if (playbackContext.current) {
-      nextPlayTime.current = playbackContext.current.currentTime
-    }
-    console.log('🔄 Audio playback reseteado')
+    // ✅ MODIFICADO: Ahora realmente DETIENE el audio del agente
+    console.log('🔄 Resetear audio playback - deteniendo audio del agente')
+    stopAgentAudio()
   }
 
   const startVoiceCapture = async () => {
@@ -452,6 +537,9 @@ function ChatInterface() {
   }
 
   const stopVoiceMode = () => {
+    // ✅ NUEVO: Detener audio del agente primero
+    stopAgentAudio()
+
     // Detener captura de audio
     stopVoiceCapture()
 
@@ -472,7 +560,9 @@ function ChatInterface() {
     setIsVoiceMode(false)
     setIsRecording(false)
     setIsVoiceProcessing(false)
+    setIsAgentSpeaking(false) // ✅ NUEVO: Resetear estado
     setVoiceConnectionStatus('Desconectado')
+    isInterrupting.current = false // ✅ NUEVO: Resetear bandera de interrupción
 
     setMessages(prev => [...prev, {
       text: '🎤 Modo voz desactivado',
@@ -488,6 +578,7 @@ function ChatInterface() {
       // Activar modo voz
       setIsVoiceMode(true)
       setIsRecording(true)
+      isInterrupting.current = false // ✅ NUEVO: Asegurar que la bandera esté desactivada al iniciar
 
       // Conectar al WebSocket de voz
       connectVoiceWebSocket()
@@ -555,6 +646,19 @@ function ChatInterface() {
                 </div>
               </div>
             )}
+            {/* ✅ NUEVO: Indicador cuando el agente está hablando */}
+            {isAgentSpeaking && isVoiceMode && (
+              <div className="message processing">
+                <div className="message-content">
+                  <div className="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  🔊 SIKA está hablando... (puedes interrumpir hablando tú)
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
         )}
@@ -577,6 +681,19 @@ function ChatInterface() {
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
           />
+
+          {/* ✅ NUEVO: Botón para interrumpir al agente manualmente */}
+          {isAgentSpeaking && isVoiceMode && (
+            <button
+              className="stop-agent-btn"
+              onClick={stopAgentAudio}
+              title="Interrumpir al agente"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="6" y="6" width="12" height="12" stroke="currentColor" strokeWidth="2" fill="currentColor"/>
+              </svg>
+            </button>
+          )}
 
           <button
             className={`microphone-btn ${isRecording ? 'recording' : ''}`}

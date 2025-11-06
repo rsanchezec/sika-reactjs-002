@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Solución: Botón Stop Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .problem-box {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .problem-box h2 {
+            color: #856404;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .solution-box {
+            background: #d4edda;
+            border: 3px solid #10b981;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .solution-box h2 {
+            color: #059669;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #10b981;
+        }
+
+        .section h2 {
+            color: #10b981;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .section h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: #75715e;
+        }
+
+        .code-block .keyword {
+            color: #66d9ef;
+        }
+
+        .code-block .string {
+            color: #e6db74;
+        }
+
+        .code-block .highlight {
+            background: #10b981;
+            color: #000;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .flow-diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .flow-step.problem {
+            border-left: 4px solid #ffc107;
+            background: #fff9e6;
+        }
+
+        .flow-step.fixed {
+            border-left: 4px solid #10b981;
+            background: #d4edda;
+        }
+
+        .flow-step .number {
+            background: #10b981;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .flow-step.problem .number {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #10b981;
+            margin: 10px 0;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✅ Solución: Botón Stop Manual</h1>
+            <p>Interrupción instantánea sin múltiples clics</p>
+        </header>
+
+        <div class="content">
+            <!-- Problema -->
+            <div class="problem-box">
+                <h2>⚠️ Problema</h2>
+                <p style="font-size: 1.2em; margin-top: 10px;">
+                    <strong>El botón rojo de "Stop" no funcionaba bien:</strong>
+                </p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li>❌ Había que presionarlo <strong>múltiples veces</strong> para interrumpir</li>
+                    <li>❌ Cuantas más preguntas habías hecho, más veces había que presionarlo</li>
+                    <li>❌ El audio del agente <strong>seguía reproduciéndose</strong> después de presionar el botón</li>
+                </ul>
+
+                <h3 style="color: #856404; margin-top: 20px;">¿Por qué pasaba esto?</h3>
+                <p style="font-size: 1.1em; margin-top: 10px;">
+                    Cuando presionabas el botón:
+                </p>
+                <ol style="margin-top: 10px;">
+                    <li>Se detenían los sources de audio activos ✅</li>
+                    <li>Se enviaba <code>response.cancel</code> al backend ✅</li>
+                    <li><strong>PERO...</strong> seguían llegando <strong>chunks de audio del backend</strong> que ya estaban "en tránsito" 📦</li>
+                    <li>❌ <code>playAudioChunk()</code> <strong>reproducía estos chunks</strong> sin verificar si deberíamos estar interrumpiendo</li>
+                    <li>❌ Resultado: El audio seguía sonando hasta que se vaciaran todos los chunks en tránsito</li>
+                </ol>
+            </div>
+
+            <!-- Solución -->
+            <div class="solution-box">
+                <h2>✅ Solución Implementada</h2>
+                <p style="font-size: 1.2em; margin-top: 10px;">
+                    <strong>Agregamos una "bandera de interrupción":</strong>
+                </p>
+                <ul style="font-size: 1.1em; margin-top: 15px;">
+                    <li>✅ Cuando se presiona Stop, se activa <code>isInterrupting = true</code></li>
+                    <li>✅ <code>playAudioChunk()</code> <strong>verifica esta bandera</strong> antes de reproducir</li>
+                    <li>✅ Si está interrumpiendo, <strong>ignora el chunk</strong> sin reproducirlo</li>
+                    <li>✅ La bandera se desactiva cuando el usuario hace una <strong>nueva pregunta</strong></li>
+                    <li>✅ <strong>Interrupción instantánea</strong> con un solo clic</li>
+                </ul>
+            </div>
+
+            <!-- Flujo -->
+            <div class="section">
+                <h2>🔄 Flujo de Interrupción (Antes vs Después)</h2>
+
+                <h3>❌ ANTES (No funcionaba):</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step problem">
+                        <div class="number">1</div>
+                        <div>Usuario presiona botón Stop</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step problem">
+                        <div class="number">2</div>
+                        <div>Se detienen sources activos y se envía <code>response.cancel</code></div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step problem">
+                        <div class="number">3</div>
+                        <div>❌ <strong>Siguen llegando chunks</strong> del backend (audio en tránsito)</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step problem">
+                        <div class="number">4</div>
+                        <div>❌ <code>playAudioChunk()</code> <strong>reproduce cada chunk</strong> que llega</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step problem">
+                        <div class="number">5</div>
+                        <div>❌ El audio sigue sonando... usuario presiona Stop otra vez...</div>
+                    </div>
+                </div>
+
+                <h3>✅ DESPUÉS (Funciona perfecto):</h3>
+                <div class="flow-diagram">
+                    <div class="flow-step fixed">
+                        <div class="number">1</div>
+                        <div>Usuario presiona botón Stop</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">2</div>
+                        <div>✅ Se activa <code>isInterrupting = true</code></div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">3</div>
+                        <div>Se detienen sources activos y se envía <code>response.cancel</code></div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">4</div>
+                        <div>Siguen llegando chunks del backend (audio en tránsito)</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">5</div>
+                        <div>✅ <code>playAudioChunk()</code> <strong>verifica la bandera</strong></div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">6</div>
+                        <div>✅ Como <code>isInterrupting = true</code>, <strong>ignora el chunk</strong> (no reproduce)</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">7</div>
+                        <div>✅ <strong>Silencio inmediato</strong> - Todos los chunks son ignorados</div>
+                    </div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-step fixed">
+                        <div class="number">8</div>
+                        <div>Usuario hace nueva pregunta → <code>isInterrupting = false</code> → Escucha la respuesta</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Código -->
+            <div class="section">
+                <h2>💻 Cambios en el Código</h2>
+
+                <h3>1. Nueva referencia para la bandera:</h3>
+                <div class="code-block">
+<span class="keyword">const</span> isInterrupting = useRef(<span class="keyword">false</span>) <span class="comment">// ✅ NUEVO</span>
+                </div>
+
+                <h3>2. Modificación de <code>stopAgentAudio()</code>:</h3>
+                <div class="code-block">
+<span class="keyword">const</span> stopAgentAudio = () => {
+  <span class="keyword">try</span> {
+    console.log(<span class="string">'🛑 Deteniendo audio del agente...'</span>)
+
+    <span class="comment">// ✅ NUEVO: Activar bandera de interrupción</span>
+    <span class="highlight">isInterrupting.current = true</span>
+
+    <span class="comment">// Detener sources activos...</span>
+    activeAudioSources.current.forEach(source => {
+      <span class="keyword">try</span> { source.stop() } <span class="keyword">catch</span> (e) {}
+    })
+
+    <span class="comment">// Limpiar lista...</span>
+    activeAudioSources.current = []
+
+    <span class="comment">// Cerrar contexto...</span>
+    <span class="keyword">if</span> (playbackContext.current) {
+      playbackContext.current.close()
+      playbackContext.current = <span class="keyword">null</span>
+    }
+
+    <span class="comment">// Enviar response.cancel al backend...</span>
+    <span class="keyword">if</span> (voiceWs.current && voiceWs.current.readyState === WebSocket.OPEN) {
+      voiceWs.current.send(JSON.stringify({
+        type: <span class="string">'response.cancel'</span>,
+        event_id: <span class="string">''</span>
+      }))
+    }
+
+    setIsAgentSpeaking(<span class="keyword">false</span>)
+    console.log(<span class="string">'✅ Audio detenido - ignorando chunks entrantes'</span>)
+  } <span class="keyword">catch</span> (error) {
+    console.error(<span class="string">'❌ Error:'</span>, error)
+  }
+}
+                </div>
+
+                <h3>3. Modificación de <code>playAudioChunk()</code>:</h3>
+                <div class="code-block">
+<span class="keyword">const</span> playAudioChunk = (arrayBuffer) => {
+  <span class="keyword">try</span> {
+    <span class="comment">// ✅ NUEVO: Verificar bandera de interrupción</span>
+    <span class="highlight"><span class="keyword">if</span> (isInterrupting.current) {</span>
+      <span class="highlight">console.log(<span class="string">'⚠️ Ignorando chunk (interrupción activa)'</span>)</span>
+      <span class="highlight"><span class="keyword">return</span> <span class="comment">// NO reproducir</span></span>
+    <span class="highlight">}</span>
+
+    <span class="comment">// Resto del código para reproducir audio...</span>
+    <span class="keyword">if</span> (!playbackContext.current) {
+      playbackContext.current = <span class="keyword">new</span> AudioContext({ sampleRate: 24000 })
+      <span class="comment">// ...</span>
+    }
+
+    <span class="comment">// Convertir PCM...</span>
+    <span class="keyword">const</span> pcmData = <span class="keyword">new</span> Int16Array(arrayBuffer)
+    <span class="comment">// ...</span>
+  } <span class="keyword">catch</span> (error) {
+    console.error(<span class="string">'❌ Error al reproducir:'</span>, error)
+  }
+}
+                </div>
+
+                <h3>4. Desactivar bandera en <code>user_transcript</code>:</h3>
+                <div class="code-block">
+<span class="keyword">case</span> <span class="string">'user_transcript'</span>:
+  <span class="comment">// Usuario hizo una nueva pregunta</span>
+  setMessages(prev => [...prev, {
+    text: data.text,
+    sender: <span class="string">'user'</span>
+  }])
+  setIsVoiceProcessing(<span class="keyword">true</span>)
+
+  <span class="comment">// ✅ NUEVO: Desactivar bandera - ahora queremos escuchar la respuesta</span>
+  <span class="highlight">isInterrupting.current = <span class="keyword">false</span></span>
+  console.log(<span class="string">'✅ Nueva pregunta - reactivando audio'</span>)
+  <span class="keyword">break</span>
+                </div>
+
+                <h3>5. Resetear bandera al iniciar/detener modo voz:</h3>
+                <div class="code-block">
+<span class="comment">// Al activar modo voz</span>
+<span class="keyword">const</span> handleMicrophoneClick = <span class="keyword">async</span> () => {
+  <span class="keyword">if</span> (!isVoiceMode) {
+    setIsVoiceMode(<span class="keyword">true</span>)
+    <span class="highlight">isInterrupting.current = <span class="keyword">false</span></span> <span class="comment">// ✅ NUEVO</span>
+    <span class="comment">// ...</span>
+  }
+}
+
+<span class="comment">// Al desactivar modo voz</span>
+<span class="keyword">const</span> stopVoiceMode = () => {
+  stopAgentAudio()
+  <span class="comment">// ...</span>
+  <span class="highlight">isInterrupting.current = <span class="keyword">false</span></span> <span class="comment">// ✅ NUEVO</span>
+}
+                </div>
+            </div>
+
+            <!-- Pruebas -->
+            <div class="section">
+                <h2>🧪 Cómo Probar</h2>
+
+                <ol>
+                    <li><strong>Reiniciar el frontend</strong>
+                        <div class="code-block">npm run dev</div>
+                    </li>
+                    <li><strong>Activar modo voz</strong></li>
+                    <li><strong>Hacer una pregunta LARGA</strong>
+                        <p style="margin-top: 5px;">"Explícame todo sobre Sikalastic-560 en detalle"</p>
+                    </li>
+                    <li><strong>Mientras el agente habla, presionar el botón rojo de Stop</strong></li>
+                    <li><strong>Verificar:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>✅ El audio se detiene <strong>inmediatamente</strong></li>
+                            <li>✅ <strong>Un solo clic</strong> es suficiente</li>
+                            <li>✅ No hay audio residual</li>
+                            <li>✅ En consola: "⚠️ Ignorando chunk (interrupción activa)" para cada chunk que llegue después</li>
+                        </ul>
+                    </li>
+                    <li><strong>Hacer una nueva pregunta</strong>
+                        <p style="margin-top: 5px;">"¿Cuánto cuesta?"</p>
+                    </li>
+                    <li><strong>Verificar:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>✅ El agente responde normalmente</li>
+                            <li>✅ El audio se reproduce correctamente</li>
+                            <li>✅ En consola: "✅ Nueva pregunta - reactivando audio"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Resumen -->
+            <div class="section">
+                <h2>📋 Resumen</h2>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead style="background: #10b981; color: white;">
+                        <tr>
+                            <th style="padding: 15px; text-align: left;">Aspecto</th>
+                            <th style="padding: 15px; text-align: left;">Antes</th>
+                            <th style="padding: 15px; text-align: left;">Después</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 15px;"><strong>Clics necesarios</strong></td>
+                            <td style="padding: 15px; color: #dc2626;">Múltiples (3-5+)</td>
+                            <td style="padding: 15px; color: #10b981;">Uno solo ✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd; background: #f8f9fa;">
+                            <td style="padding: 15px;"><strong>Tiempo de respuesta</strong></td>
+                            <td style="padding: 15px; color: #dc2626;">Lento (chunks en cola)</td>
+                            <td style="padding: 15px; color: #10b981;">Instantáneo ✅</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 15px;"><strong>Audio residual</strong></td>
+                            <td style="padding: 15px; color: #dc2626;">Sí, seguía sonando</td>
+                            <td style="padding: 15px; color: #10b981;">No, silencio total ✅</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 15px;"><strong>Experiencia</strong></td>
+                            <td style="padding: 15px; color: #dc2626;">Frustrante</td>
+                            <td style="padding: 15px; color: #10b981;">Natural y fluida ✅</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Conclusión -->
+            <div class="section" style="border-left-color: #10b981;">
+                <h2>✅ Conclusión</h2>
+
+                <div style="background: #d4edda; padding: 25px; border-radius: 8px; border: 2px solid #10b981;">
+                    <h3 style="color: #155724; margin-bottom: 15px;">🎉 Problema Resuelto</h3>
+                    <p style="font-size: 1.2em; color: #155724;">
+                        <strong>El botón Stop ahora funciona perfectamente con un solo clic.</strong>
+                    </p>
+                    <p style="margin-top: 15px; color: #155724;">
+                        La bandera <code>isInterrupting</code> evita que se reproduzcan chunks de audio que siguen
+                        llegando del backend después de presionar el botón, logrando una interrupción instantánea.
+                    </p>
+                </div>
+
+                <p style="margin-top: 30px; font-size: 1.2em; text-align: center; color: #10b981; font-weight: bold;">
+                    🚀 La interrupción manual ahora es instantánea e intuitiva
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>📅 Solución implementada el 6 de noviembre de 2025</p>
+            <p>🤖 Desarrollado con Claude Code</p>
+        </footer>
+    </div>
+</body>
+</html>

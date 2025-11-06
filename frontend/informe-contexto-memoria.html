@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe: Memoria y Contexto - SIKA Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #2ecc71;
+        }
+
+        .section h2 {
+            color: #2ecc71;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .status-box {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .status-box.green {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .status-box.yellow {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+
+        .status-box.red {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: #75715e;
+        }
+
+        .code-block .keyword {
+            color: #66d9ef;
+        }
+
+        .code-block .string {
+            color: #e6db74;
+        }
+
+        .evidence {
+            background: white;
+            padding: 20px;
+            border-left: 4px solid #2ecc71;
+            margin: 15px 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .evidence-title {
+            font-weight: bold;
+            color: #2ecc71;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .file-path {
+            color: #667eea;
+            font-family: monospace;
+            font-size: 0.9em;
+            background: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #f1f1f1;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2em;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .success-box-title {
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2em;
+        }
+
+        .scenario {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .scenario-title {
+            font-weight: bold;
+            color: #1976D2;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Informe: Memoria y Contexto</h1>
+            <p>¿La aplicación recuerda el contexto de la conversación?</p>
+        </header>
+
+        <div class="content">
+            <!-- Respuesta Rápida -->
+            <div style="text-align: center; margin: 30px 0;">
+                <h2 style="color: #2ecc71; margin-bottom: 20px;">📝 Respuesta Rápida</h2>
+                <div class="status-box green">
+                    ✅ MODO TEXTO: SÍ mantiene contexto completo y persistente
+                </div>
+                <div class="status-box yellow">
+                    ⚠️ MODO VOZ: Mantiene contexto DENTRO de la sesión, pero NO entre sesiones
+                </div>
+                <div class="status-box red">
+                    ❌ TEXTO y VOZ NO comparten contexto entre sí
+                </div>
+            </div>
+
+            <!-- Modo Texto -->
+            <div class="section">
+                <h2><span class="icon">💬</span> Modo TEXTO (Chat)</h2>
+
+                <div class="status-box green">
+                    ✅ MEMORIA PERSISTENTE Y COMPLETA
+                </div>
+
+                <h3>¿Cómo funciona?</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">🔍 Implementación de Threads Persistentes</div>
+                    <p><span class="file-path">backend/text/assistant_websocket.py:82-108</span></p>
+                    <div class="code-block">
+<span class="comment"># Diccionario que mantiene threads por usuario</span>
+self.user_threads: Dict[str, str] = {}  <span class="comment"># {user_id: thread_id}</span>
+
+<span class="keyword">async def</span> connect(self, websocket: WebSocket, user_id: str):
+    <span class="comment"># Si ya tiene un thread, recuperarlo; sino, crear uno nuevo</span>
+    <span class="keyword">if</span> user_id <span class="keyword">in</span> self.user_threads:
+        thread_id = self.user_threads[user_id]
+        logger.info(<span class="string">f"📂 Sesión recuperada: {user_id}"</span>)
+    <span class="keyword">else</span>:
+        client = self._get_client()
+        <span class="keyword">with</span> client:
+            thread = client.agents.create_thread()  <span class="comment"># Crea nuevo thread en Azure</span>
+            thread_id = thread.id
+        self.user_threads[user_id] = thread_id
+        logger.info(<span class="string">f"🆕 Nueva sesión: {user_id}"</span>)
+
+    <span class="keyword">return</span> thread_id
+                    </div>
+                </div>
+
+                <h3>Características de la memoria en modo texto:</h3>
+                <ul>
+                    <li>✅ <strong>Persistente:</strong> El historial se guarda en Azure AI y permanece aunque cierres el navegador</li>
+                    <li>✅ <strong>Por usuario:</strong> Cada usuario tiene su propio thread independiente</li>
+                    <li>✅ <strong>Recuperable:</strong> Si te desconectas y vuelves con el mismo user_id, recuperas tu historial completo</li>
+                    <li>✅ <strong>Ilimitado:</strong> No hay límite aparente de mensajes (depende de Azure AI)</li>
+                    <li>✅ <strong>Incluye todo:</strong> Todas tus preguntas y respuestas del agente</li>
+                </ul>
+
+                <div class="success-box">
+                    <div class="success-box-title">💡 Ejemplo de uso</div>
+                    <div class="scenario">
+                        <div class="scenario-title">Sesión 1 (Lunes):</div>
+                        <p><strong>Usuario:</strong> "¿Qué es Sikalastic-560?"</p>
+                        <p><strong>Bot:</strong> "Es una membrana líquida impermeabilizante..."</p>
+                    </div>
+                    <div class="scenario">
+                        <div class="scenario-title">Usuario cierra el navegador y se va a casa...</div>
+                    </div>
+                    <div class="scenario">
+                        <div class="scenario-title">Sesión 2 (Martes, desde otro dispositivo):</div>
+                        <p><strong>Usuario:</strong> "¿Cuánto tiempo tarda en secar?"</p>
+                        <p><strong>Bot:</strong> "El Sikalastic-560 que mencionaste ayer tarda aproximadamente..." <em>(El bot recuerda la conversación anterior)</em></p>
+                    </div>
+                </div>
+
+                <div class="evidence">
+                    <div class="evidence-title">📋 Evidencia en el código</div>
+                    <p><span class="file-path">backend/text/assistant_websocket.py:133-158</span></p>
+                    <div class="code-block">
+<span class="comment"># Crear mensaje del usuario en el thread existente</span>
+client.agents.create_message(
+    thread_id=thread_id,  <span class="comment"># ← Usa el mismo thread</span>
+    role=<span class="string">"user"</span>,
+    content=message
+)
+
+<span class="comment"># Ejecutar asistente (esto lee TODO el historial del thread)</span>
+run = client.agents.create_run(
+    thread_id=thread_id,  <span class="comment"># ← El agente ve TODO el contexto</span>
+    agent_id=self.agent_id
+)
+
+<span class="comment"># Obtener respuesta</span>
+messages = client.agents.list_messages(thread_id=thread_id)
+response = messages.data[0].content[0].text.value
+                    </div>
+                    <p><strong>Cada vez que envías un mensaje, Azure AI lee TODO el thread completo para generar la respuesta.</strong></p>
+                </div>
+            </div>
+
+            <!-- Modo Voz -->
+            <div class="section" style="border-left-color: #f39c12;">
+                <h2><span class="icon">🎤</span> Modo VOZ</h2>
+
+                <div class="status-box yellow">
+                    ⚠️ MEMORIA TEMPORAL (solo durante la sesión)
+                </div>
+
+                <h3>¿Cómo funciona?</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">🔍 Azure Voice Live API</div>
+                    <p><span class="file-path">backend/voice/voice_manager.py:231-361</span></p>
+                    <p>El modo voz utiliza <strong>Azure Voice Live API</strong>, que es diferente a la API de chat con threads.</p>
+                    <div class="code-block">
+<span class="keyword">def</span> start(self) -> str:
+    <span class="comment"># Conectar a Voice Live API</span>
+    self.connection = client.connect(
+        agent_connection_string=agent_connection_string,
+        agent_id=self.agent_id,  <span class="comment"># ← Mismo agente que texto</span>
+        agent_access_token=agent_token.token
+    )
+
+    <span class="comment"># Configurar sesión de voz (NO hay thread_id aquí)</span>
+    session_update = {
+        <span class="string">"type"</span>: <span class="string">"session.update"</span>,
+        <span class="string">"session"</span>: {
+            <span class="string">"turn_detection"</span>: { ... },
+            <span class="string">"voice"</span>: { ... }
+        }
+    }
+                    </div>
+                </div>
+
+                <h3>Características de la memoria en modo voz:</h3>
+                <ul>
+                    <li>✅ <strong>Mantiene contexto DENTRO de la sesión:</strong> Mientras el micrófono esté activo, recuerda la conversación</li>
+                    <li>❌ <strong>NO es persistente:</strong> Cuando desactivas el modo voz, se pierde el contexto</li>
+                    <li>❌ <strong>NO crea threads:</strong> No usa el sistema de threads de Azure AI</li>
+                    <li>❌ <strong>NO recuperable:</strong> Si te desconectas, no puedes recuperar el historial de voz</li>
+                    <li>⚠️ <strong>Temporal:</strong> Solo existe mientras la sesión de voz está activa</li>
+                </ul>
+
+                <div class="alert">
+                    <div class="alert-title">⚠️ Limitación Importante</div>
+                    <div class="scenario">
+                        <div class="scenario-title">Escenario:</div>
+                        <p><strong>Usuario activa voz:</strong> "¿Qué es Sikalastic-560?"</p>
+                        <p><strong>Bot responde:</strong> "Es una membrana líquida..."</p>
+                        <p><strong>Usuario pregunta:</strong> "¿Cuánto tiempo tarda en secar?"</p>
+                        <p><strong>Bot:</strong> "El Sikalastic-560 tarda aproximadamente..." ✅ <em>(Recuerda porque estás en la misma sesión)</em></p>
+                        <hr style="margin: 15px 0; border: none; border-top: 2px dashed #ffc107;">
+                        <p><strong>Usuario desactiva el modo voz (presiona botón de micrófono)</strong></p>
+                        <p><strong>Usuario vuelve a activar el modo voz</strong></p>
+                        <p><strong>Usuario pregunta:</strong> "¿Y cuál es su precio?"</p>
+                        <p><strong>Bot:</strong> "¿El precio de qué producto?" ❌ <em>(NO recuerda la conversación anterior)</em></p>
+                    </div>
+                </div>
+
+                <h3>¿Por qué funciona así?</h3>
+                <p><strong>Azure Voice Live API</strong> está diseñada para conversaciones en tiempo real, no para persistencia. Es como una llamada telefónica: mientras la llamada está activa, hay contexto, pero cuando cuelgas, se pierde.</p>
+            </div>
+
+            <!-- Comparación -->
+            <div class="section" style="border-left-color: #667eea;">
+                <h2><span class="icon">⚖️</span> Comparación Detallada</h2>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Modo TEXTO 💬</th>
+                            <th>Modo VOZ 🎤</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Memoria durante la sesión</td>
+                            <td>✅ Sí, completa</td>
+                            <td>✅ Sí, completa</td>
+                        </tr>
+                        <tr>
+                            <td>Memoria entre sesiones</td>
+                            <td>✅ Sí, persistente</td>
+                            <td>❌ No, se pierde</td>
+                        </tr>
+                        <tr>
+                            <td>Recuperable después de cerrar</td>
+                            <td>✅ Sí, siempre</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td>API usada</td>
+                            <td>Azure AI Project Client (Threads)</td>
+                            <td>Azure Voice Live API (Realtime)</td>
+                        </tr>
+                        <tr>
+                            <td>Identificador de sesión</td>
+                            <td>thread_id (persistente)</td>
+                            <td>session_id (temporal)</td>
+                        </tr>
+                        <tr>
+                            <td>Comparte contexto con el otro modo</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                        </tr>
+                        <tr>
+                            <td>Límite de mensajes</td>
+                            <td>Ilimitado (limitado por Azure)</td>
+                            <td>Limitado a la sesión activa</td>
+                        </tr>
+                        <tr>
+                            <td>Mismo agente</td>
+                            <td>✅ Sí (AZURE_AGENT_ID)</td>
+                            <td>✅ Sí (AZURE_AGENT_ID)</td>
+                        </tr>
+                        <tr>
+                            <td>Misma base de conocimiento</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td>Mismo contexto conversacional</td>
+                            <td>❌ No (son sesiones separadas)</td>
+                            <td>❌ No (son sesiones separadas)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Problema de Aislamiento -->
+            <div class="section" style="border-left-color: #e74c3c;">
+                <h2><span class="icon">🚧</span> Problema: Los Modos NO Comparten Contexto</h2>
+
+                <div class="status-box red">
+                    ❌ TEXTO y VOZ son conversaciones completamente separadas
+                </div>
+
+                <div class="alert">
+                    <div class="alert-title">⚠️ Escenario Problemático</div>
+                    <div class="scenario">
+                        <div class="scenario-title">Por TEXTO:</div>
+                        <p><strong>Usuario:</strong> "¿Qué es Sikalastic-560?"</p>
+                        <p><strong>Bot:</strong> "Es una membrana líquida impermeabilizante..."</p>
+                        <p><strong>Usuario:</strong> "¿Cuáles son sus ventajas?"</p>
+                        <p><strong>Bot:</strong> "Las ventajas del Sikalastic-560 son..."</p>
+                    </div>
+                    <hr style="margin: 15px 0; border: none; border-top: 2px dashed #e74c3c;">
+                    <div class="scenario">
+                        <div class="scenario-title">Usuario cambia a VOZ:</div>
+                        <p><strong>Usuario (por voz):</strong> "¿Y cuál es su precio?"</p>
+                        <p><strong>Bot:</strong> "¿El precio de qué producto?" ❌</p>
+                        <p><em>El bot NO recuerda que estabas hablando de Sikalastic-560 en el chat de texto.</em></p>
+                    </div>
+                </div>
+
+                <h3>¿Por qué pasa esto?</h3>
+                <ul>
+                    <li>El modo <strong>TEXTO</strong> usa <code>thread_id</code> de Azure AI Projects</li>
+                    <li>El modo <strong>VOZ</strong> usa <code>session_id</code> de Azure Voice Live</li>
+                    <li>Son APIs completamente diferentes</li>
+                    <li>No hay sincronización entre ellas</li>
+                </ul>
+
+                <h3>¿Es esto un problema?</h3>
+                <p><strong>Depende del caso de uso:</strong></p>
+                <ul>
+                    <li>✅ <strong>Si los usuarios usan UN solo modo:</strong> No hay problema</li>
+                    <li>❌ <strong>Si los usuarios cambian entre modos:</strong> La experiencia es confusa y fragmentada</li>
+                    <li>❌ <strong>Si quieres una experiencia unificada:</strong> Es un problema serio</li>
+                </ul>
+            </div>
+
+            <!-- Recomendaciones -->
+            <div class="section" style="border-left-color: #3498db;">
+                <h2><span class="icon">💡</span> Recomendaciones</h2>
+
+                <h3>Opción 1: Mantener el diseño actual (Más simple)</h3>
+                <div class="success-box">
+                    <div class="success-box-title">✅ Pros</div>
+                    <ul>
+                        <li>No requiere cambios de código</li>
+                        <li>Más simple de mantener</li>
+                        <li>Usa las APIs como fueron diseñadas</li>
+                    </ul>
+                </div>
+                <div class="alert">
+                    <div class="alert-title">⚠️ Requerimientos</div>
+                    <ul>
+                        <li><strong>Comunicar claramente al usuario</strong> que son modos separados</li>
+                        <li>Agregar mensaje en UI: <em>"El historial de texto y voz son independientes"</em></li>
+                        <li>Recomendar usar un solo modo por conversación</li>
+                    </ul>
+                </div>
+
+                <h3>Opción 2: Sincronizar contexto (Más complejo)</h3>
+                <div class="evidence">
+                    <div class="evidence-title">🔧 Implementación sugerida</div>
+                    <p>Para lograr contexto compartido, necesitarías:</p>
+                    <ol>
+                        <li><strong>Mantener el thread de texto siempre:</strong>
+                            <ul>
+                                <li>El thread de texto es la "fuente de verdad"</li>
+                                <li>Persiste todo el historial</li>
+                            </ul>
+                        </li>
+                        <li><strong>Al activar modo voz:</strong>
+                            <div class="code-block">
+<span class="comment"># Antes de iniciar Voice Live:</span>
+<span class="comment"># 1. Obtener el historial completo del thread de texto</span>
+messages = client.agents.list_messages(thread_id=user_thread_id)
+conversation_history = format_messages(messages)
+
+<span class="comment"># 2. Inyectar contexto en la sesión de voz como "instrucciones"</span>
+session_update = {
+    <span class="string">"type"</span>: <span class="string">"session.update"</span>,
+    <span class="string">"session"</span>: {
+        <span class="string">"instructions"</span>: <span class="string">f"Contexto previo: {conversation_history}"</span>,
+        ...
+    }
+}
+                            </div>
+                        </li>
+                        <li><strong>Al desactivar modo voz:</strong>
+                            <ul>
+                                <li>Transcribir toda la conversación de voz</li>
+                                <li>Guardarla como mensajes en el thread de texto</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div class="alert">
+                    <div class="alert-title">⚠️ Consideraciones</div>
+                    <ul>
+                        <li>Aumenta la complejidad significativamente</li>
+                        <li>Puede haber límites de tokens en las instrucciones de Voice Live</li>
+                        <li>La sincronización puede fallar</li>
+                        <li>Requiere más tiempo de desarrollo y testing</li>
+                    </ul>
+                </div>
+
+                <h3>Opción 3: Voice-Only con persistencia (Rediseño)</h3>
+                <p>Si quieres priorizar voz:</p>
+                <ul>
+                    <li>Eliminar el modo texto o hacerlo completamente secundario</li>
+                    <li>Transcribir todas las conversaciones de voz</li>
+                    <li>Guardar transcripciones en un thread de texto en background</li>
+                    <li>Usar ese thread como fuente de contexto para nuevas sesiones de voz</li>
+                </ul>
+            </div>
+
+            <!-- Conclusión -->
+            <div class="section" style="border-left-color: #9b59b6;">
+                <h2><span class="icon">🎯</span> Conclusión</h2>
+
+                <h3>Situación Actual:</h3>
+                <table class="comparison-table">
+                    <tbody>
+                        <tr>
+                            <td>Modo TEXTO</td>
+                            <td>✅ Memoria completa y persistente</td>
+                        </tr>
+                        <tr>
+                            <td>Modo VOZ</td>
+                            <td>⚠️ Memoria temporal (solo durante sesión activa)</td>
+                        </tr>
+                        <tr>
+                            <td>Contexto compartido</td>
+                            <td>❌ Los modos NO comparten contexto</td>
+                        </tr>
+                        <tr>
+                            <td>Mismo agente</td>
+                            <td>✅ Sí, usan el mismo AZURE_AGENT_ID</td>
+                        </tr>
+                        <tr>
+                            <td>Misma base de conocimiento</td>
+                            <td>✅ Sí, responden con la misma información</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Recomendación Final:</h3>
+                <p><strong>Para la mayoría de casos de uso, la implementación actual es ADECUADA</strong>, siempre y cuando:</p>
+                <ol>
+                    <li>Comuniques claramente que los modos son independientes</li>
+                    <li>El usuario sepa que debe elegir un modo y mantenerlo</li>
+                    <li>Si necesitas contexto compartido, implementa la Opción 2 (sincronización)</li>
+                </ol>
+
+                <div class="success-box">
+                    <div class="success-box-title">✅ Lo que SÍ funciona bien:</div>
+                    <ul>
+                        <li>El modo texto mantiene historial perfecto</li>
+                        <li>El modo voz funciona bien para conversaciones continuas</li>
+                        <li>Ambos usan el mismo agente con el mismo conocimiento</li>
+                        <li>La arquitectura es sólida y bien diseñada</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📅 Informe generado el 6 de noviembre de 2025</p>
+            <p>🤖 Análisis realizado por Claude Code</p>
+        </footer>
+    </div>
+</body>
+</html>

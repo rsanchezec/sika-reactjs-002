@@ -59,7 +59,6 @@ az containerapp update \
   --name ${CONTAINER_APP_NAME} \
   --resource-group ${RESOURCE_GROUP} \
   --image ${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${IMAGE_TAG} \
-  --target-port 8001 \
   --output none
 
 REVISION=$(az containerapp revision list \

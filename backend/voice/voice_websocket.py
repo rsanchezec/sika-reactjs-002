@@ -93,11 +93,17 @@ class VoiceConnectionManager:
                 logger.debug(f"Enviando audio al cliente: {len(audio_bytes)} bytes")
                 await websocket.send_bytes(audio_bytes)
 
+            async def send_user_speech_started():
+                # ✅ NUEVO: Notificar al frontend que el usuario empezó a hablar
+                logger.info(f"Notificando al frontend que el usuario interrumpió")
+                await self._send_event(websocket, "input_audio_buffer.speech_started", {})
+
             voice_manager.on_session_created = send_session_created
             voice_manager.on_user_transcript = send_user_transcript
             voice_manager.on_agent_response = send_agent_text
             voice_manager.on_agent_audio_transcript = send_agent_transcript
             voice_manager.on_agent_audio = send_agent_audio
+            voice_manager.on_user_speech_started = send_user_speech_started  # ✅ NUEVO
 
             # Iniciar sesión de voz
             session_id = voice_manager.start()
@@ -147,6 +153,24 @@ class VoiceConnectionManager:
             voice_manager.send_audio(audio_data)
         except Exception as e:
             logger.error(f"Error sending audio: {e}")
+
+    def cancel_response(self, user_id: str):
+        """
+        Cancela la respuesta actual del agente para un usuario
+
+        Args:
+            user_id: ID del usuario
+        """
+        if user_id not in self.active_sessions:
+            logger.warning(f"No active voice session for user {user_id}")
+            return
+
+        _, voice_manager = self.active_sessions[user_id]
+        try:
+            voice_manager.cancel_response()
+            logger.info(f"Response cancelled for user {user_id}")
+        except Exception as e:
+            logger.error(f"Error cancelling response: {e}")
 
     def stop_session(self, user_id: str):
         """
@@ -300,6 +324,12 @@ async def websocket_voice_endpoint(websocket: WebSocket):
                             "type": "voice_session_stopped"
                         })
                         break
+
+                    elif message_type == "response.cancel":
+                        # ✅ NUEVO: Cancelar la respuesta actual del agente
+                        logger.info(f"🛑 User {user_id} interrupted agent - cancelling response")
+                        voice_manager.cancel_response(user_id)
+                        # No necesitamos enviar respuesta al frontend, el audio simplemente se detendrá
 
                 # Si es datos binarios (audio)
                 elif "bytes" in message:

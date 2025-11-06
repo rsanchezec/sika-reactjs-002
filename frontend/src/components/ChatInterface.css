@@ -240,7 +240,8 @@
 
 .add-btn,
 .microphone-btn,
-.send-btn {
+.send-btn,
+.stop-agent-btn {
   background: none;
   border: none;
   color: #8e8e8e;
@@ -258,6 +259,27 @@
 .microphone-btn:hover {
   background-color: #3f3f3f;
   color: #ececec;
+}
+
+/* Stop Agent Button - Estilo llamativo para interrumpir */
+.stop-agent-btn {
+  background-color: #ef4444;
+  color: #ffffff;
+  animation: pulse-stop 1.5s infinite;
+}
+
+.stop-agent-btn:hover {
+  background-color: #dc2626;
+  transform: scale(1.1);
+}
+
+@keyframes pulse-stop {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
 }
 
 .send-btn {

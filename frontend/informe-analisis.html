@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Análisis - Proyecto SIKA Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .status.red {
+            background: #fee;
+            color: #c33;
+        }
+
+        .status.yellow {
+            background: #ffc;
+            color: #990;
+        }
+
+        .status.green {
+            background: #efe;
+            color: #3a3;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .code-block .comment {
+            color: #75715e;
+        }
+
+        .code-block .keyword {
+            color: #66d9ef;
+        }
+
+        .code-block .string {
+            color: #e6db74;
+        }
+
+        .evidence {
+            background: white;
+            padding: 15px;
+            border-left: 3px solid #764ba2;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .evidence-title {
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 5px;
+        }
+
+        .file-path {
+            color: #667eea;
+            font-family: monospace;
+            font-size: 0.9em;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .icon {
+            font-size: 1.2em;
+        }
+
+        .recommendation {
+            background: #fff9e6;
+            border: 2px solid #ffc107;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .recommendation-title {
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .big-status {
+            font-size: 3em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Informe de Análisis Técnico</h1>
+            <p>Proyecto SIKA - Chatbot con Voz</p>
+            <p style="font-size: 0.9em; opacity: 0.8; margin-top: 10px;">Análisis de Frontend y Backend</p>
+        </header>
+
+        <div class="content">
+            <!-- Resumen Ejecutivo -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Interrupción</h3>
+                    <div class="big-status">🔴</div>
+                    <p><strong>NO implementada</strong> en frontend</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Voz Latina</h3>
+                    <div class="big-status">🔴</div>
+                    <p><strong>NO</strong> - Usa voz de España</p>
+                </div>
+                <div class="summary-card">
+                    <h3>UX Voice-First</h3>
+                    <div class="big-status">🔴</div>
+                    <p><strong>NO</strong> - Es text-first</p>
+                </div>
+                <div class="summary-card">
+                    <h3>API Correcta</h3>
+                    <div class="big-status">🟢</div>
+                    <p><strong>SÍ</strong> - Implementado correctamente</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 1: Interrupción -->
+            <div class="section">
+                <h2><span class="icon">🔇</span> 1. ¿Se puede interrumpir la voz del agente?</h2>
+                <span class="status red">❌ NO IMPLEMENTADA EN FRONTEND</span>
+
+                <h3>Hallazgos:</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">✅ Backend sí tiene lógica de interrupción</div>
+                    <p><span class="file-path">backend/voice/voice_manager.py:455-459</span></p>
+                    <div class="code-block">
+<span class="keyword">elif</span> event_type == <span class="string">"input_audio_buffer.speech_started"</span>:
+    logger.info(<span class="string">"User started speaking"</span>)
+    <span class="comment"># Detener reproducción cuando el usuario habla</span>
+    <span class="keyword">if</span> self.audio_player:
+        self.audio_player.stop()
+                    </div>
+                    <p>El backend de Azure detecta cuando el usuario empieza a hablar y detiene el reproductor de audio <strong>local</strong>.</p>
+                </div>
+
+                <div class="evidence">
+                    <div class="evidence-title">❌ Frontend NO interrumpe el audio</div>
+                    <p><span class="file-path">frontend/src/components/ChatInterface.jsx:230-279</span></p>
+                    <p>Aunque el frontend tiene una función <code>playAudioChunk()</code> que reproduce el audio del agente, <strong>NO hay ninguna lógica que detecte cuando el usuario empieza a hablar para interrumpir la reproducción</strong>.</p>
+
+                    <div class="code-block">
+<span class="comment">// Línea 377-383</span>
+<span class="keyword">const</span> resetAudioPlayback = () => {
+    <span class="comment">// Solo resetea el TIEMPO, no detiene el audio</span>
+    <span class="keyword">if</span> (playbackContext.current) {
+        nextPlayTime.current = playbackContext.current.currentTime
+    }
+    console.log(<span class="string">'🔄 Audio playback reseteado'</span>)
+}
+                    </div>
+                </div>
+
+                <h3>Problema Identificado:</h3>
+                <ul>
+                    <li>Cuando el agente está hablando y el usuario presiona el botón del micrófono, el audio del agente <strong>sigue reproduciéndose</strong></li>
+                    <li>El backend NO puede detener el audio que ya se envió al cliente</li>
+                    <li>Falta implementar detección en el frontend para detener todos los <code>AudioBufferSourceNode</code> activos</li>
+                </ul>
+
+                <div class="recommendation">
+                    <div class="recommendation-title">💡 Recomendaciones</div>
+                    <ol>
+                        <li><strong>Detectar cuando el usuario empieza a hablar</strong> (cuando <code>startVoiceCapture()</code> se ejecuta)</li>
+                        <li><strong>Detener inmediatamente la cola de reproducción</strong>: cerrar el <code>playbackContext</code> y crear uno nuevo</li>
+                        <li><strong>Descartar cualquier audio buffered</strong> que aún no se haya reproducido</li>
+                        <li><strong>Opcional</strong>: Implementar un botón de "Stop" visible durante la reproducción del agente</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Pregunta 2: Voz Latina -->
+            <div class="section">
+                <h2><span class="icon">🗣️</span> 2. ¿Tiene una voz más moderna y latina?</h2>
+                <span class="status red">❌ NO - USA VOZ DE ESPAÑA</span>
+
+                <h3>Hallazgos:</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">🔍 Configuración actual de voz</div>
+                    <p><span class="file-path">backend/voice/voice_manager.py:332-337</span></p>
+                    <div class="code-block">
+<span class="string">"voice"</span>: {
+    <span class="string">"name"</span>: <span class="string">"es-ES-ElviraNeural"</span>,  <span class="comment"># Voz en español de ESPAÑA</span>
+    <span class="string">"type"</span>: <span class="string">"azure-standard"</span>,
+    <span class="string">"temperature"</span>: 0.8,
+    <span class="string">"speaking-rate"</span>: 1
+}
+                    </div>
+                    <p><strong>Problema:</strong> <code>es-ES-ElviraNeural</code> es una voz de España (castellano peninsular), NO es latina.</p>
+                </div>
+
+                <h3>Voces Latinas Disponibles en Azure:</h3>
+                <ul>
+                    <li><strong>México:</strong>
+                        <ul>
+                            <li><code>es-MX-DaliaNeural</code> (Mujer) - Moderna y profesional</li>
+                            <li><code>es-MX-JorgeNeural</code> (Hombre) - Cálido y amigable</li>
+                            <li><code>es-MX-CandelaNeural</code> (Mujer) - Joven y dinámica</li>
+                        </ul>
+                    </li>
+                    <li><strong>Colombia:</strong>
+                        <ul>
+                            <li><code>es-CO-SalomeNeural</code> (Mujer) - Clara y profesional</li>
+                            <li><code>es-CO-GonzaloNeural</code> (Hombre)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Argentina:</strong>
+                        <ul>
+                            <li><code>es-AR-ElenaNeural</code> (Mujer)</li>
+                            <li><code>es-AR-TomasNeural</code> (Hombre)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="recommendation">
+                    <div class="recommendation-title">💡 Recomendación</div>
+                    <p><strong>Cambiar la configuración de voz a:</strong></p>
+                    <div class="code-block">
+<span class="string">"voice"</span>: {
+    <span class="string">"name"</span>: <span class="string">"es-MX-DaliaNeural"</span>,  <span class="comment"># Voz mexicana moderna y profesional</span>
+    <span class="string">"type"</span>: <span class="string">"azure-standard"</span>,
+    <span class="string">"temperature"</span>: 0.8,
+    <span class="string">"speaking-rate"</span>: 1.1  <span class="comment"># Ligeramente más rápida (más moderna)</span>
+}
+                    </div>
+                    <p>O bien <code>es-MX-CandelaNeural</code> si se busca un tono más joven y dinámico.</p>
+                </div>
+            </div>
+
+            <!-- Pregunta 3: UX Voice-First -->
+            <div class="section">
+                <h2><span class="icon">🎤</span> 3. ¿La UX es voice-first?</h2>
+                <span class="status red">❌ NO - ES TEXT-FIRST</span>
+
+                <h3>Análisis de la Interfaz:</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">📝 Evidencia de diseño text-first</div>
+                    <p><span class="file-path">frontend/src/components/ChatInterface.jsx:564-611</span></p>
+                    <p><strong>Problemas identificados:</strong></p>
+                    <ul>
+                        <li>El <strong>input de texto</strong> ocupa el espacio principal y es lo más prominente visualmente</li>
+                        <li>El botón de micrófono es pequeño y está al lado del input como característica <strong>secundaria</strong></li>
+                        <li>El placeholder dice <em>"Pregunta lo que quieras"</em> - invita a escribir, no a hablar</li>
+                        <li>No hay indicación visual clara de que la voz es el método principal de interacción</li>
+                        <li>El botón "+" (añadir archivo) está más prominente que el micrófono</li>
+                    </ul>
+                </div>
+
+                <div class="evidence">
+                    <div class="evidence-title">🎨 Diseño actual del input</div>
+                    <div class="code-block">
+&lt;div className=<span class="string">"input-wrapper"</span>&gt;
+  &lt;button className=<span class="string">"add-btn"</span>&gt;+&lt;/button&gt;
+
+  &lt;input type=<span class="string">"text"</span>
+         placeholder=<span class="string">"Pregunta lo que quieras"</span> <span class="comment">&lt;-- Invita a ESCRIBIR</span>
+         className=<span class="string">"message-input"</span> /&gt;        <span class="comment">&lt;-- PROMINENTE</span>
+
+  &lt;button className=<span class="string">"microphone-btn"</span>&gt;🎤&lt;/button&gt; <span class="comment">&lt;-- SECUNDARIO</span>
+  &lt;button className=<span class="string">"send-btn"</span>&gt;↑&lt;/button&gt;
+&lt;/div&gt;
+                    </div>
+                </div>
+
+                <h3>¿Qué significa Voice-First UX?</h3>
+                <p>Una interfaz voice-first debe:</p>
+                <ol>
+                    <li><strong>Promover la voz como método principal</strong> - El micrófono debe ser el elemento más prominente</li>
+                    <li><strong>Texto como fallback</strong> - Input de texto disponible pero discreto, aparece solo cuando se necesita</li>
+                    <li><strong>Feedback visual claro</strong> - Animaciones y estados visuales que indiquen "estoy escuchando"</li>
+                    <li><strong>Estado de voz siempre visible</strong> - El usuario debe saber si puede hablar o no</li>
+                    <li><strong>Minimizar interacciones manuales</strong> - Activación por voz, sin necesidad de presionar botones repetidamente</li>
+                </ol>
+
+                <div class="recommendation">
+                    <div class="recommendation-title">💡 Recomendaciones para UX Voice-First</div>
+                    <ol>
+                        <li><strong>Invertir la jerarquía visual:</strong>
+                            <ul>
+                                <li>Botón de micrófono GRANDE y central</li>
+                                <li>Input de texto pequeño o colapsable (aparece solo cuando se hace clic en "escribir")</li>
+                            </ul>
+                        </li>
+                        <li><strong>Animaciones visuales:</strong>
+                            <ul>
+                                <li>Onda de sonido animada cuando el usuario habla</li>
+                                <li>Pulsación suave del botón del micrófono cuando el agente responde</li>
+                                <li>Indicador claro de "esperando tu voz"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Cambiar placeholder:</strong>
+                            <ul>
+                                <li>En lugar de "Pregunta lo que quieras" (texto)</li>
+                                <li>Usar "Presiona el micrófono o escribe tu pregunta"</li>
+                            </ul>
+                        </li>
+                        <li><strong>Modo hands-free:</strong>
+                            <ul>
+                                <li>Permitir conversación continua sin presionar el botón cada vez</li>
+                                <li>Detección automática de voz (VAD)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Tooltip/hint inicial:</strong>
+                            <ul>
+                                <li>"🎤 Prueba hablar conmigo" al cargar la página</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Pregunta 4: API con agentId y projectId -->
+            <div class="section">
+                <h2><span class="icon">🔌</span> 4. ¿Está usando la API correctamente con agentId y projectId?</h2>
+                <span class="status green">✅ SÍ - IMPLEMENTACIÓN CORRECTA</span>
+
+                <h3>Análisis de la Arquitectura:</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">📡 Backend de Texto (Chat Persistente)</div>
+                    <p><span class="file-path">backend/text/assistant_websocket.py</span></p>
+                    <div class="code-block">
+<span class="comment"># Línea 69-70</span>
+self.connection_string = os.getenv(<span class="string">"PROJECT_CONNECTION_STRING"</span>)
+self.agent_id = os.getenv(<span class="string">"AZURE_AGENT_ID"</span>)
+
+<span class="comment"># Línea 89-92</span>
+<span class="keyword">return</span> AIProjectClient.from_connection_string(
+    credential=DefaultAzureCredential(),
+    conn_str=self.connection_string  <span class="comment"># ✅ Incluye project info</span>
+)
+
+<span class="comment"># Línea 141-144</span>
+run = client.agents.create_run(
+    thread_id=thread_id,
+    agent_id=self.agent_id  <span class="comment"># ✅ Usa agent_id correctamente</span>
+)
+                    </div>
+                    <p><strong>✅ Correcto:</strong> Usa <code>PROJECT_CONNECTION_STRING</code> que contiene información del proyecto y pasa <code>agent_id</code> al crear el run.</p>
+                </div>
+
+                <div class="evidence">
+                    <div class="evidence-title">🎤 Backend de Voz (Voice Live API)</div>
+                    <p><span class="file-path">backend/voice/voice_websocket.py</span> y <span class="file-path">backend/voice/voice_manager.py</span></p>
+                    <div class="code-block">
+<span class="comment"># voice_websocket.py - Línea 175</span>
+AGENT_ID = os.getenv(<span class="string">"AZURE_AGENT_ID"</span>)
+voice_manager = VoiceConnectionManager(agent_id=AGENT_ID)
+
+<span class="comment"># voice_manager.py - Línea 267</span>
+agent_connection_string = os.environ.get(<span class="string">"AI_FOUNDRY_AGENT_CONNECTION_STRING"</span>)
+
+<span class="comment"># voice_manager.py - Línea 304-308</span>
+self.connection = client.connect(
+    agent_connection_string=agent_connection_string,  <span class="comment"># ✅ Connection string</span>
+    agent_id=self.agent_id,                           <span class="comment"># ✅ Agent ID</span>
+    agent_access_token=agent_token.token              <span class="comment"># ✅ Token de acceso</span>
+)
+                    </div>
+                    <p><strong>✅ Correcto:</strong> Usa <code>AI_FOUNDRY_AGENT_CONNECTION_STRING</code> (que contiene info del proyecto) y <code>agent_id</code>.</p>
+                </div>
+
+                <h3>¿Por qué hay dos endpoints distintos?</h3>
+
+                <div class="evidence">
+                    <div class="evidence-title">🔍 Explicación de la arquitectura</div>
+                    <p><strong>Hay dos backends con endpoints diferentes:</strong></p>
+                    <ul>
+                        <li>
+                            <strong>Puerto 8000 - <code>ws://localhost:8000/ws/chat</code></strong>
+                            <p>API de chat basada en mensajes (request/response)</p>
+                            <p>Usa: <code>azure.ai.projects.AIProjectClient</code></p>
+                            <p>Para: Conversaciones de texto con historial persistente</p>
+                        </li>
+                        <li>
+                            <strong>Puerto 8001 - <code>ws://localhost:8001/ws/voice</code></strong>
+                            <p>API de voz en tiempo real (streaming de audio bidireccional)</p>
+                            <p>Usa: <code>Azure Voice Live WebSocket API</code></p>
+                            <p>Para: Conversaciones de voz con detección de voz activa (VAD), cancelación de eco, y síntesis de voz</p>
+                        </li>
+                    </ul>
+
+                    <p><strong>✅ Esto es CORRECTO y necesario</strong> porque son dos servicios diferentes de Azure:</p>
+                    <ol>
+                        <li><strong>Azure AI Project Client</strong> - Para agentes conversacionales basados en mensajes</li>
+                        <li><strong>Azure Voice Live API</strong> - Para interacciones de voz en tiempo real con el mismo agente</li>
+                    </ol>
+
+                    <p>Ambos usan el mismo <code>AZURE_AGENT_ID</code>, lo que garantiza que es el <strong>mismo agente</strong> respondiendo en ambos modos (texto y voz).</p>
+                </div>
+
+                <div class="evidence">
+                    <div class="evidence-title">📋 Variables de entorno necesarias</div>
+                    <p>El proyecto requiere las siguientes variables:</p>
+                    <div class="code-block">
+<span class="comment"># Para modo TEXTO</span>
+PROJECT_CONNECTION_STRING=<span class="string">"..."</span>      <span class="comment"># Connection string del proyecto</span>
+AZURE_AGENT_ID=<span class="string">"..."</span>                   <span class="comment"># ID del agente</span>
+
+<span class="comment"># Para modo VOZ</span>
+AI_FOUNDRY_AGENT_CONNECTION_STRING=<span class="string">"..."</span> <span class="comment"># Connection string para Voice Live</span>
+AZURE_AGENT_ID=<span class="string">"..."</span>                   <span class="comment"># El MISMO agent ID</span>
+AZURE_VOICELIVE_ENDPOINT=<span class="string">"..."</span>        <span class="comment"># Endpoint de Voice Live API</span>
+AZURE_VOICELIVE_API_VERSION=<span class="string">"2025-10-01"</span>
+
+<span class="comment"># Autenticación (Service Principal o Managed Identity)</span>
+AZURE_TENANT_ID=<span class="string">"..."</span>
+AZURE_CLIENT_ID=<span class="string">"..."</span>
+AZURE_CLIENT_SECRET=<span class="string">"..."</span>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <div class="recommendation-title">💡 Conclusión</div>
+                    <p><strong>✅ La implementación es CORRECTA</strong></p>
+                    <ul>
+                        <li>Usa <code>PROJECT_CONNECTION_STRING</code> que contiene información del proyecto</li>
+                        <li>Usa <code>AZURE_AGENT_ID</code> correctamente en ambos backends</li>
+                        <li>Los dos endpoints son necesarios porque son APIs diferentes de Azure</li>
+                        <li>El mismo agente responde en ambos modos (texto y voz)</li>
+                    </ul>
+                    <p><strong>No hay nada que corregir en este aspecto.</strong></p>
+                </div>
+            </div>
+
+            <!-- Conclusiones Finales -->
+            <div class="section" style="border-left-color: #ff6b6b;">
+                <h2><span class="icon">📌</span> Conclusiones y Prioridades</h2>
+
+                <h3>Problemas Críticos a Resolver:</h3>
+                <ol>
+                    <li>
+                        <strong>🔴 ALTA PRIORIDAD - Implementar interrupción de audio en frontend</strong>
+                        <p>Sin esto, la experiencia de voz es frustrante porque el usuario no puede interrumpir al agente.</p>
+                    </li>
+                    <li>
+                        <strong>🔴 ALTA PRIORIDAD - Cambiar a voz latina</strong>
+                        <p>Simple cambio de configuración en <code>voice_manager.py</code> línea 333.</p>
+                    </li>
+                    <li>
+                        <strong>🟡 MEDIA PRIORIDAD - Rediseñar UI para voice-first</strong>
+                        <p>Requiere cambios de diseño en <code>ChatInterface.jsx</code> y <code>ChatInterface.css</code>.</p>
+                    </li>
+                </ol>
+
+                <h3>Aspectos Positivos:</h3>
+                <ul>
+                    <li>✅ La arquitectura backend está bien diseñada y usa las APIs correctamente</li>
+                    <li>✅ El sistema de voz funciona (captura y reproducción)</li>
+                    <li>✅ Separación clara entre modo texto y modo voz</li>
+                    <li>✅ Usa el mismo agente para ambos modos</li>
+                </ul>
+
+                <h3>Archivos que Necesitan Modificación:</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <thead>
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 10px; text-align: left;">Archivo</th>
+                            <th style="padding: 10px; text-align: left;">Cambio Necesario</th>
+                            <th style="padding: 10px; text-align: center;">Prioridad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 10px; font-family: monospace;">backend/voice/voice_manager.py</td>
+                            <td style="padding: 10px;">Cambiar voz a latina (línea 333)</td>
+                            <td style="padding: 10px; text-align: center;">🔴 Alta</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; font-family: monospace;">frontend/src/components/ChatInterface.jsx</td>
+                            <td style="padding: 10px;">Implementar interrupción de audio</td>
+                            <td style="padding: 10px; text-align: center;">🔴 Alta</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 10px; font-family: monospace;">frontend/src/components/ChatInterface.jsx</td>
+                            <td style="padding: 10px;">Rediseñar UI voice-first</td>
+                            <td style="padding: 10px; text-align: center;">🟡 Media</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; font-family: monospace;">frontend/src/components/ChatInterface.css</td>
+                            <td style="padding: 10px;">Estilos para UI voice-first</td>
+                            <td style="padding: 10px; text-align: center;">🟡 Media</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>📅 Informe generado el 6 de noviembre de 2025</p>
+            <p>🤖 Análisis realizado por Claude Code</p>
+        </footer>
+    </div>
+</body>
+</html>
