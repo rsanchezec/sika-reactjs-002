@@ -394,22 +394,15 @@ class VoiceManager:
             return
 
         try:
-            # 1. Cancelar la respuesta actual
+            # Cancelar la respuesta actual del agente
+            # NO limpiar input_audio_buffer: eso borraría el audio del usuario
+            # y provocaría que nunca se genere el transcript
             cancel_message = {
                 "type": "response.cancel",
                 "event_id": ""
             }
             self.connection.send(json.dumps(cancel_message))
-            logger.info("✅ Cancelando respuesta en curso...")
-
-            # 2. ✅ NUEVO: Limpiar el buffer de audio de entrada para evitar procesamiento residual
-            # Esto asegura que cualquier audio ya enviado pero no procesado sea descartado
-            clear_message = {
-                "type": "input_audio_buffer.clear",
-                "event_id": ""
-            }
-            self.connection.send(json.dumps(clear_message))
-            logger.info("✅ Buffer de audio limpiado")
+            logger.info("✅ Respuesta del agente cancelada")
 
         except Exception as e:
             logger.error(f"❌ Error al cancelar respuesta: {e}")
@@ -486,17 +479,17 @@ class VoiceManager:
                                 self._safe_call_callback(self.on_agent_audio, audio_bytes)
 
                     elif event_type == "input_audio_buffer.speech_started":
-                        logger.info("🎤 User started speaking - interrupting agent")
+                        logger.info("🎤 User started speaking")
 
-                        # ✅ NUEVO: Cancelar la respuesta en curso en Azure
-                        self.cancel_response()
+                        # NO llamar cancel_response() aquí: borra el buffer de audio del usuario
+                        # y provoca que nunca se genere el transcript (ciclo infinito de speech_started)
+                        # El response.cancel solo se envía cuando el frontend lo solicita explícitamente
 
-                        # Detener reproducción cuando el usuario habla (solo si hay reproductor local)
+                        # Detener reproducción local si hay audio del agente reproduciéndose
                         if self.audio_player:
                             self.audio_player.stop()
 
-                        # ✅ NUEVO: Notificar al frontend que el usuario interrumpió
-                        # Este callback permitirá al frontend detener el audio también
+                        # Notificar al frontend para que detenga su reproducción de audio
                         if hasattr(self, 'on_user_speech_started') and self.on_user_speech_started:
                             self._safe_call_callback(self.on_user_speech_started)
 
